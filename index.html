@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concretos Arciniega - Sistema Integral</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            cyan: '#06b6d4',      /* Cyan 500 - Principal vistoso */
+                            lightCyan: '#22d3ee', /* Cyan 400 */
+                            blue: '#3b82f6',      /* Blue 500 */
+                            royal: '#1d4ed8',     /* Blue 700 - Azul Real para Portal */
+                            cobalt: '#1e3a8a',    /* Blue 900 - Azul Cobalto profundo */
+                            deepBlue: '#0f172a',  /* Slate 900 - Para menús oscuros */
+                            teal: '#14b8a6',      /* Teal 500 - Acentos verde/azul */
+                            emerald: '#10b981',   /* Emerald 500 - Éxito/Positivo */
+                            bgLight: '#f0f9ff',   /* Sky 50 - Fondo general */
+                            glass: 'rgba(255, 255, 255, 0.85)'
+                        }
+                    },
+                    boxShadow: {
+                        'glow-cyan': '0 0 20px rgba(6, 182, 212, 0.4)',
+                        'glow-teal': '0 0 20px rgba(20, 184, 166, 0.4)',
+                        'glow-royal': '0 10px 25px -5px rgba(29, 78, 216, 0.35)',
+                        'soft': '0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.01)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Toast Notifications */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            min-width: 250px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .toast-success { background: linear-gradient(135deg, #10b981, #059669); }
+        .toast-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .toast-info { background: linear-gradient(135deg, #1d4ed8, #1e3a8a); }
+
+        /* Tarjetas Expandibles de Misión y Visión */
+        .mv-card {
+            cursor: pointer;
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, opacity 0.35s ease;
+        }
+        .mv-card.expanded {
+            transform: scale(1.07);
+            z-index: 30;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 25px 50px -12px rgba(6, 182, 212, 0.35);
+        }
+        .mv-card.dimmed {
+            opacity: 0.55;
+            transform: scale(0.96);
+        }
+
+        /* Tarjetas 3D Flip (¿Por qué elegirnos?) */
+        .flip-card {
+            perspective: 1200px;
+            height: 290px;
+            cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner,
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-brand-bgLight text-slate-800 font-sans flex flex-col min-h-screen selection:bg-brand-cyan selection:text-white">
+
+    <!-- Contenedor de Notificaciones -->
+    <div id="toast-container"></div>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav id="main-nav" class="glass-panel sticky top-0 z-50 shadow-sm border-b border-sky-100/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <!-- Logo -->
+                <a href="index.html" onclick="showSection('home')" class="flex items-center cursor-pointer group">
+                    <div class="bg-gradient-to-br from-brand-cyan to-brand-teal p-2.5 rounded-xl shadow-lg group-hover:shadow-glow-cyan transition-all duration-300">
+                        <i class="fa-solid fa-truck-concrete text-white text-2xl"></i>
+                    </div>
+                    <span class="font-extrabold text-2xl ml-3 bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-brand-cyan tracking-tight">Arciniega</span>
+                </a>
+                
+                <!-- Menú Desktop -->
+                <div class="hidden md:flex items-center space-x-2">
+                    <button onclick="showSection('home')" class="px-4 py-2 text-brand-cyan bg-sky-50 font-semibold rounded-lg transition-colors">Inicio</button>
+                    <a href="Productos.html" class="px-4 py-2 text-slate-600 font-semibold rounded-lg hover:bg-sky-50 hover:text-brand-cyan transition-colors">Productos</a>
+                    <a href="contacto.html" class="px-4 py-2 text-slate-600 font-semibold rounded-lg hover:bg-sky-50 hover:text-brand-cyan transition-colors">Contacto</a>
+                    <div class="h-6 w-px bg-slate-200 mx-2"></div>
+                    <div id="nav-portal-area">
+                        <button onclick="abrirPortalLogin()" class="bg-gradient-to-r from-brand-royal to-brand-cobalt text-white px-6 py-2.5 rounded-full hover:shadow-glow-royal hover:scale-105 transition-all duration-300 font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-user-circle"></i> Portal
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Menú Móvil Botón -->
+                <div class="flex items-center md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-slate-600 hover:text-brand-cyan p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menú Móvil Desplegable -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-sky-100 absolute w-full shadow-lg">
+            <div class="px-4 py-4 space-y-2">
+                <button onclick="showSection('home'); toggleMobileMenu()" class="block w-full text-left px-4 py-3 rounded-lg text-brand-cyan bg-sky-50 font-bold">Inicio</button>
+                <a href="Productos.html" class="block w-full text-left px-4 py-3 rounded-lg text-slate-700 font-bold hover:bg-sky-50">Productos</a>
+                <a href="contacto.html" class="block w-full text-left px-4 py-3 rounded-lg text-slate-700 font-bold hover:bg-sky-50">Contacto</a>
+                <button onclick="abrirPortalLogin(); toggleMobileMenu()" class="block w-full text-center px-4 py-3 mt-4 rounded-xl bg-gradient-to-r from-brand-royal to-brand-cobalt text-white font-bold shadow-md">Portal de Acceso</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= CONTENIDO PRINCIPAL ================= -->
+    <main class="flex-grow flex flex-col relative w-full h-full">
+
+        <!-- SECCIÓN: INICIO -->
+        <section id="home" class="view-section flex-grow flex flex-col pb-20">
+            <!-- Hero -->
+            <div class="relative overflow-hidden bg-brand-deepBlue text-white py-24 lg:py-32">
+                <div class="absolute inset-0 z-0 opacity-30">
+                    <div class="absolute -top-24 -left-24 w-96 h-96 bg-brand-cyan rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
+                    <div class="absolute top-1/2 -right-24 w-96 h-96 bg-brand-teal rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
+                </div>
+                
+                <div class="relative z-10 max-w-7xl mx-auto px-4 text-center">
+                    <span class="inline-block py-1.5 px-4 rounded-full bg-cyan-900/50 border border-brand-cyan/40 text-brand-lightCyan text-sm font-bold tracking-widest mb-6 uppercase">Construyendo el futuro</span>
+                    <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight leading-tight">
+                        Fuerza y Precisión en cada <br class="hidden md:block" />
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-lightCyan to-brand-teal">Metro Cúbico</span>
+                    </h1>
+                    <p class="text-xl text-slate-300 max-w-3xl mx-auto mb-10 font-medium leading-relaxed">
+                        Entregamos concretos premezclados y derivados con estricto control de calidad. Garantizamos medidas exactas avaladas por normativas oficiales.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="Productos.html" class="bg-gradient-to-r from-brand-cyan to-brand-teal px-8 py-4 rounded-full font-bold text-lg text-white hover:shadow-glow-cyan hover:scale-105 transition-all duration-300 inline-block">Ver Catálogo</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Misión y Visión (Interactivas al presionar) -->
+            <div class="max-w-7xl mx-auto px-4 py-16 w-full -mt-12 relative z-20">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+                    <div id="card-mision" onclick="toggleMissionVision(this)" class="mv-card glass-panel p-10 rounded-3xl shadow-soft border-t-4 border-t-brand-cyan relative">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-xl bg-cyan-100 flex items-center justify-center mr-4 text-brand-cyan text-2xl">
+                                    <i class="fa-solid fa-bullseye"></i>
+                                </div>
+                                <h2 class="text-3xl font-extrabold text-slate-800">Nuestra Misión</h2>
+                            </div>
+                            <span class="mv-badge text-xs font-bold text-brand-cyan bg-cyan-50 px-3 py-1 rounded-full">
+                                <i class="fa-solid fa-expand mr-1"></i> Ampliar
+                            </span>
+                        </div>
+                        <p class="text-slate-600 text-lg font-medium leading-relaxed">
+                            Satisfacer las necesidades estructurales brindando atención personalizada y un servicio inigualable, contribuyendo al desarrollo preservando el medio ambiente mediante prácticas éticas.
+                        </p>
+                    </div>
+                    
+                    <div id="card-vision" onclick="toggleMissionVision(this)" class="mv-card glass-panel p-10 rounded-3xl shadow-soft border-t-4 border-t-brand-teal relative">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-xl bg-teal-100 flex items-center justify-center mr-4 text-brand-teal text-2xl">
+                                    <i class="fa-solid fa-eye"></i>
+                                </div>
+                                <h2 class="text-3xl font-extrabold text-slate-800">Nuestra Visión</h2>
+                            </div>
+                            <span class="mv-badge text-xs font-bold text-brand-teal bg-teal-50 px-3 py-1 rounded-full">
+                                <i class="fa-solid fa-expand mr-1"></i> Ampliar
+                            </span>
+                        </div>
+                        <p class="text-slate-600 text-lg font-medium leading-relaxed">
+                            Consolidarnos como la empresa líder en materiales de construcción en la región. Ser reconocidos por nuestra responsabilidad, compromiso y superación constante de expectativas.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Por qué elegirnos (Tarjetas con giro 3D) -->
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-extrabold text-slate-800">¿Por qué elegir Arciniega?</h2>
+                    <p class="text-slate-500 mt-2 text-sm font-medium">Pasa el cursor o toca cada tarjeta para ver los detalles</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Tarjeta 1: Volumen Completo -->
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-white p-8 shadow-sm border border-slate-100 flex flex-col items-center justify-center text-center">
+                                <div class="w-16 h-16 mx-auto bg-cyan-50 rounded-full flex items-center justify-center mb-4 text-brand-cyan text-2xl"><i class="fa-solid fa-cube"></i></div>
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">Volumen Completo</h3>
+                                <p class="text-slate-500 text-sm">Capacidad del producto en completo estado y medida para sus necesidades.</p>
+                                <span class="mt-4 text-xs font-bold text-brand-cyan flex items-center gap-1"><i class="fa-solid fa-rotate"></i> Ver detalle</span>
+                            </div>
+                            <div class="flip-card-back bg-gradient-to-br from-brand-cyan to-cyan-700 text-white p-7 shadow-lg flex flex-col items-center justify-center text-center">
+                                <h4 class="text-lg font-extrabold mb-3 border-b border-white/30 pb-2 w-full">Exactitud Garantizada</h4>
+                                <p class="text-sm leading-relaxed text-cyan-50">
+                                    Dosificación automatizada por computadora y básculas certificadas que aseguran el 100% de los metros cúbicos solicitados en cada olla revolvedora, evitando faltantes en tu colado.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 2: Precio y Calidad -->
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-white p-8 shadow-sm border border-slate-100 flex flex-col items-center justify-center text-center">
+                                <div class="w-16 h-16 mx-auto bg-teal-50 rounded-full flex items-center justify-center mb-4 text-brand-teal text-2xl"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">Precio y Calidad</h3>
+                                <p class="text-slate-500 text-sm">Accesibilidad con alto nivel de calidad, cumpliendo normas exigentes.</p>
+                                <span class="mt-4 text-xs font-bold text-brand-teal flex items-center gap-1"><i class="fa-solid fa-rotate"></i> Ver detalle</span>
+                            </div>
+                            <div class="flip-card-back bg-gradient-to-br from-brand-teal to-teal-700 text-white p-7 shadow-lg flex flex-col items-center justify-center text-center">
+                                <h4 class="text-lg font-extrabold mb-3 border-b border-white/30 pb-2 w-full">Normatividad Oficial</h4>
+                                <p class="text-sm leading-relaxed text-teal-50">
+                                    Cotizaciones directas de planta sin intermediarios. Nuestras mezclas cumplen estrictamente con la norma NMX-C-155 y pruebas de laboratorio de resistencia a la compresión.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 3: Asesoría Profesional -->
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-white p-8 shadow-sm border border-slate-100 flex flex-col items-center justify-center text-center">
+                                <div class="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center mb-4 text-brand-blue text-2xl"><i class="fa-solid fa-user-shield"></i></div>
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">Asesoría Profesional</h3>
+                                <p class="text-slate-500 text-sm">Asesores correspondientes al área con alto nivel de profesionalismo.</p>
+                                <span class="mt-4 text-xs font-bold text-brand-blue flex items-center gap-1"><i class="fa-solid fa-rotate"></i> Ver detalle</span>
+                            </div>
+                            <div class="flip-card-back bg-gradient-to-br from-brand-blue to-blue-800 text-white p-7 shadow-lg flex flex-col items-center justify-center text-center">
+                                <h4 class="text-lg font-extrabold mb-3 border-b border-white/30 pb-2 w-full">Soporte Técnico en Obra</h4>
+                                <p class="text-sm leading-relaxed text-blue-50">
+                                    Ingenieros especialistas te acompañan desde el cálculo de volumen y selección de resistencia (f'c) hasta el bombeo y curado óptimo para tu proyecto estructural.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 4: Entrega Puntual -->
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-white p-8 shadow-sm border border-slate-100 flex flex-col items-center justify-center text-center">
+                                <div class="w-16 h-16 mx-auto bg-emerald-50 rounded-full flex items-center justify-center mb-4 text-brand-emerald text-2xl"><i class="fa-solid fa-truck-fast"></i></div>
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">Entrega Puntual</h3>
+                                <p class="text-slate-500 text-sm">Respetamos tus tiempos con un servicio logístico altamente eficiente.</p>
+                                <span class="mt-4 text-xs font-bold text-brand-emerald flex items-center gap-1"><i class="fa-solid fa-rotate"></i> Ver detalle</span>
+                            </div>
+                            <div class="flip-card-back bg-gradient-to-br from-brand-emerald to-emerald-700 text-white p-7 shadow-lg flex flex-col items-center justify-center text-center">
+                                <h4 class="text-lg font-extrabold mb-3 border-b border-white/30 pb-2 w-full">Logística Programada</h4>
+                                <p class="text-sm leading-relaxed text-emerald-50">
+                                    Flotilla moderna de camiones revolvedores y bombas pluma con monitoreo GPS, programados para arribar en el horario exacto y mantener la trabajabilidad del concreto.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: LOGIN PORTAL (DIVIDIDO EN DOS Y EN AZUL REAL / COBALTO) -->
+        <section id="login" class="view-section hidden fade-in flex-grow flex items-center justify-center p-4 py-12">
+            
+            <!-- PASO 1: INICIAR SESIÓN -->
+            <div id="portal-vista-login" class="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-blue-100 fade-in">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 mx-auto bg-gradient-to-br from-brand-royal to-brand-cobalt rounded-2xl flex items-center justify-center text-white text-2xl shadow-glow-royal mb-4">
+                        <i class="fa-solid fa-user-lock"></i>
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-slate-900">Iniciar Sesión</h2>
+                    <p class="text-slate-500 font-medium text-sm mt-1">Acceso al portal corporativo y clientes</p>
+                </div>
+                
+                <form onsubmit="event.preventDefault(); handleLogin();" class="space-y-5">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Sucursal</label>
+                            <select class="w-full px-3.5 py-3 bg-blue-50/40 border border-blue-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm font-medium text-slate-700">
+                                <option>Jilotepec Central</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Rol</label>
+                            <select id="login-role" onchange="actualizarPlaceholdersLogin()" class="w-full px-3.5 py-3 bg-blue-50/40 border border-blue-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm font-bold text-brand-cobalt">
+                                <option value="cliente">Cliente</option>
+                                <option value="admin">Administrador</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label id="lbl-login-user" class="block text-sm font-bold text-slate-700 mb-1">Correo Electrónico</label>
+                        <input type="text" id="login-user" placeholder="correo@ejemplo.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm" required>
+                    </div>
+
+                    <div>
+                        <label id="lbl-login-pass" class="block text-sm font-bold text-slate-700 mb-1">Teléfono Registrado</label>
+                        <input type="password" id="login-pass" placeholder="10 dígitos" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm" required>
+                    </div>
+
+                    <button type="submit" class="w-full bg-gradient-to-r from-brand-royal to-brand-cobalt text-white font-bold py-3.5 rounded-xl hover:shadow-glow-royal hover:brightness-110 transition-all mt-2">
+                        Entrar
+                    </button>
+                </form>
+
+                <!-- Enlace inferior para crear cuenta -->
+                <div class="mt-7 pt-5 border-t border-blue-100 text-center">
+                    <p class="text-sm text-slate-500">
+                        ¿No tienes una cuenta?
+                        <button type="button" onclick="cambiarVistaPortal('registro')" class="text-brand-royal font-extrabold hover:text-brand-cobalt hover:underline ml-1 transition-colors">
+                            Crear una cuenta
+                        </button>
+                    </p>
+                </div>
+            </div>
+
+            <!-- PASO 2: CREAR CUENTA (OCULTO HASTA PRESIONAR EL ENLACE) -->
+            <div id="portal-vista-registro" class="hidden max-w-xl w-full bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-blue-100">
+                <div class="text-center mb-6">
+                    <span class="inline-block py-1 px-3.5 rounded-full bg-blue-50 text-brand-royal border border-blue-200 text-xs font-bold uppercase mb-2">
+                        Nuevo Cliente
+                    </span>
+                    <h2 class="text-3xl font-extrabold text-slate-900">Crear Cuenta</h2>
+                    <p class="text-slate-500 font-medium text-sm mt-1">Tus datos se guardarán en la base de datos para cotizar y comprar</p>
+                </div>
+                
+                <form onsubmit="event.preventDefault(); handleRegistro();" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nombre *</label>
+                            <input type="text" id="reg-nombre" placeholder="Ej. Juan" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Apellido Paterno *</label>
+                            <input type="text" id="reg-appat" placeholder="Ej. Pérez" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Apellido Materno</label>
+                            <input type="text" id="reg-apmat" placeholder="Ej. Arce" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Teléfono (será tu contraseña) *</label>
+                            <input type="tel" id="reg-tel" maxlength="15" placeholder="5512345678" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Correo Electrónico *</label>
+                            <input type="email" id="reg-email" placeholder="juan@correo.com" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Calle y Número *</label>
+                            <input type="text" id="reg-calle" placeholder="Av. Principal #10" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Colonia *</label>
+                            <input type="text" id="reg-colonia" placeholder="Centro" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Código Postal *</label>
+                            <input type="text" id="reg-cp" maxlength="5" placeholder="54240" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Municipio *</label>
+                            <input type="text" id="reg-municipio" value="Jilotepec" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Estado *</label>
+                            <input type="text" id="reg-estado" value="Estado de México" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-royal outline-none text-sm" required>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start pt-1">
+                        <input type="checkbox" id="terms" class="mt-1 mr-2 rounded text-brand-royal" required>
+                        <label for="terms" class="text-xs text-slate-500">Acepto los términos y aviso de privacidad de Concretos Arciniega.</label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-gradient-to-r from-brand-royal to-brand-cobalt text-white font-bold py-3 rounded-xl hover:shadow-glow-royal hover:brightness-110 transition-all">
+                        Registrarse y Guardar
+                    </button>
+                </form>
+
+                <!-- Enlace inferior para regresar a iniciar sesión -->
+                <div class="mt-6 pt-5 border-t border-blue-100 text-center">
+                    <p class="text-sm text-slate-500">
+                        ¿Ya tienes una cuenta?
+                        <button type="button" onclick="cambiarVistaPortal('login')" class="text-brand-royal font-extrabold hover:text-brand-cobalt hover:underline ml-1 transition-colors">
+                            Iniciar sesión
+                        </button>
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= DASHBOARD ADMINISTRATIVO ================= -->
+        <section id="dashboard" class="view-section hidden bg-slate-100 w-full flex h-[100vh] overflow-hidden fixed top-0 left-0 z-[100]">
+            
+            <!-- Sidebar -->
+            <aside class="w-64 bg-brand-deepBlue text-slate-300 flex flex-col shadow-2xl relative z-20">
+                <div class="p-5 bg-slate-950 flex items-center gap-3 border-b border-slate-800">
+                    <div class="w-10 h-10 rounded-full bg-brand-cyan flex items-center justify-center text-white font-bold">A</div>
+                    <div>
+                        <p class="text-sm font-bold text-white">AdminV</p>
+                        <p class="text-xs text-brand-cyan">DB: concretos_a</p>
+                    </div>
+                </div>
+                
+                <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1 custom-scroll">
+                    <p class="px-3 text-[10px] font-bold tracking-wider text-slate-500 uppercase mb-2">Inventario</p>
+                    <button id="link-articulos" onclick="showDashboardView('articulos')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-brand-cyan text-white font-bold transition-all"><i class="fa-solid fa-boxes-stacked w-5"></i> Artículos</button>
+                    <button id="link-proveedores" onclick="showDashboardView('proveedores')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white font-semibold transition-all"><i class="fa-solid fa-handshake w-5"></i> Proveedores</button>
+                    
+                    <p class="px-3 text-[10px] font-bold tracking-wider text-slate-500 uppercase mt-6 mb-2">Comercial</p>
+                    <button id="link-clientes" onclick="showDashboardView('clientes')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white font-semibold transition-all"><i class="fa-solid fa-users w-5"></i> Clientes</button>
+                    <button id="link-ventas" onclick="showDashboardView('ventas')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white font-semibold transition-all"><i class="fa-solid fa-file-invoice-dollar w-5"></i> Ventas</button>
+                    
+                    <p class="px-3 text-[10px] font-bold tracking-wider text-slate-500 uppercase mt-6 mb-2">Logística y RRHH</p>
+                    <button id="link-vehiculos" onclick="showDashboardView('vehiculos')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white font-semibold transition-all"><i class="fa-solid fa-truck w-5"></i> Vehículos</button>
+                    <button id="link-personal" onclick="showDashboardView('personal')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white font-semibold transition-all"><i class="fa-solid fa-user-tie w-5"></i> Personal / Usuarios</button>
+                </nav>
+                
+                <div class="p-4 bg-slate-950 border-t border-slate-800">
+                    <button onclick="cerrarSesion()" class="w-full py-2 rounded-lg text-red-400 hover:bg-red-500/10 font-bold text-sm">
+                        <i class="fa-solid fa-power-off"></i> Cerrar Sesión
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Content del Dashboard -->
+            <main class="flex-1 flex flex-col h-full bg-slate-50 relative z-10 overflow-hidden">
+                <!-- Header interno -->
+                <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center z-10">
+                    <h2 id="dash-title" class="text-xl font-extrabold text-slate-800">Control de Inventario</h2>
+                    <div class="relative w-64">
+                        <i class="fa-solid fa-search absolute left-3 top-2.5 text-slate-400"></i>
+                        <input type="text" placeholder="Buscar registros..." class="w-full pl-9 pr-4 py-2 bg-slate-100 rounded-full text-sm outline-none focus:ring-2 focus:ring-brand-cyan">
+                    </div>
+                </header>
+
+                <!-- Contenedor scrolleable de las vistas -->
+                <div class="flex-1 overflow-y-auto p-6 custom-scroll">
+                    
+                    <!-- VISTA 1: ARTÍCULOS -->
+                    <div id="view-articulos" class="dash-view fade-in block">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 border-l-4 border-l-brand-cyan">
+                                <p class="text-xs font-bold text-slate-400 uppercase">Total Productos (BD)</p>
+                                <h3 id="kpi-total-productos" class="text-3xl font-extrabold text-slate-800">0</h3>
+                                <p class="text-xs text-brand-emerald mt-1">Sincronizado con `articulos`</p>
+                            </div>
+                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 border-l-4 border-l-amber-500">
+                                <p class="text-xs font-bold text-slate-400 uppercase">Stock Bajo / Crítico</p>
+                                <h3 id="kpi-stock-bajo" class="text-3xl font-extrabold text-slate-800">0</h3>
+                                <p class="text-xs text-amber-500 mt-1"><i class="fa-solid fa-triangle-exclamation"></i> Requieren surtido</p>
+                            </div>
+                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 border-l-4 border-l-brand-teal">
+                                <p class="text-xs font-bold text-slate-400 uppercase">Valor Inventario</p>
+                                <h3 id="kpi-valor-inventario" class="text-3xl font-extrabold text-slate-800">$0.00</h3>
+                                <p class="text-xs text-slate-400 mt-1">Pesos MXN</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                                <h3 class="font-bold text-slate-800">Tabla `articulos`</h3>
+                                <button class="px-4 py-2 bg-brand-cyan text-white text-xs font-bold rounded-lg shadow hover:bg-brand-lightCyan" onclick="cargarTablasDashboard()">Actualizar BD</button>
+                            </div>
+                            <table class="w-full text-left text-sm whitespace-nowrap">
+                                <thead class="bg-slate-100 text-slate-500 text-xs uppercase font-bold">
+                                    <tr>
+                                        <th class="px-5 py-3">ID / SKU</th>
+                                        <th class="px-5 py-3">Descripción (`desc1`)</th>
+                                        <th class="px-5 py-3 text-center">Stock</th>
+                                        <th class="px-5 py-3 text-right">Precio Base</th>
+                                        <th class="px-5 py-3 text-center">Estatus</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-articulos" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- VISTA 2: PROVEEDORES -->
+                    <div id="view-proveedores" class="dash-view hidden">
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden h-full">
+                            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                                <h3 class="font-bold text-slate-800">Tabla `proveedor`</h3>
+                            </div>
+                            <table class="w-full text-left text-sm whitespace-nowrap">
+                                <thead class="bg-slate-100 text-slate-500 text-xs uppercase font-bold">
+                                    <tr>
+                                        <th class="px-5 py-3">ID</th>
+                                        <th class="px-5 py-3">Razón Social</th>
+                                        <th class="px-5 py-3">Contacto</th>
+                                        <th class="px-5 py-3">Teléfono</th>
+                                        <th class="px-5 py-3 text-center">Estatus</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-proveedores" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- VISTA 3: CLIENTES -->
+                    <div id="view-clientes" class="dash-view hidden">
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden h-full">
+                            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                                <h3 class="font-bold text-slate-800">Directorio `cliente`</h3>
+                            </div>
+                            <table class="w-full text-left text-sm whitespace-nowrap">
+                                <thead class="bg-slate-100 text-slate-500 text-xs uppercase font-bold">
+                                    <tr>
+                                        <th class="px-5 py-3">ID</th>
+                                        <th class="px-5 py-3">Nombre Completo</th>
+                                        <th class="px-5 py-3">Teléfono (`tel1`)</th>
+                                        <th class="px-5 py-3">Correo (`email1`)</th>
+                                        <th class="px-5 py-3 text-center">Estatus</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-clientes" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- VISTA 4: VENTAS -->
+                    <div id="view-ventas" class="dash-view hidden">
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden h-full">
+                            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                                <h3 class="font-bold text-slate-800">Historial `ventas`</h3>
+                            </div>
+                            <table class="w-full text-left text-sm whitespace-nowrap">
+                                <thead class="bg-slate-100 text-slate-500 text-xs uppercase font-bold">
+                                    <tr>
+                                        <th class="px-5 py-3">Folio</th>
+                                        <th class="px-5 py-3">Fecha</th>
+                                        <th class="px-5 py-3">ID Cliente</th>
+                                        <th class="px-5 py-3 text-right">Total</th>
+                                        <th class="px-5 py-3 text-center">Forma Pago</th>
+                                        <th class="px-5 py-3 text-center">Estatus</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-ventas" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- VISTA 5: VEHÍCULOS -->
+                    <div id="view-vehiculos" class="dash-view hidden">
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden h-full">
+                            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                                <h3 class="font-bold text-slate-800">Flotilla `vehiculos`</h3>
+                            </div>
+                            <table class="w-full text-left text-sm whitespace-nowrap">
+                                <thead class="bg-slate-100 text-slate-500 text-xs uppercase font-bold">
+                                    <tr>
+                                        <th class="px-5 py-3">ID</th>
+                                        <th class="px-5 py-3">Marca / Modelo</th>
+                                        <th class="px-5 py-3">Placa</th>
+                                        <th class="px-5 py-3">Capacidad</th>
+                                        <th class="px-5 py-3 text-center">Estatus</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-vehiculos" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- VISTA 6: PERSONAL -->
+                    <div id="view-personal" class="dash-view hidden">
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden h-full">
+                            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                                <h3 class="font-bold text-slate-800">Nómina `personal`</h3>
+                            </div>
+                            <table class="w-full text-left text-sm whitespace-nowrap">
+                                <thead class="bg-slate-100 text-slate-500 text-xs uppercase font-bold">
+                                    <tr>
+                                        <th class="px-5 py-3">ID</th>
+                                        <th class="px-5 py-3">Nombre Completo</th>
+                                        <th class="px-5 py-3">Puesto</th>
+                                        <th class="px-5 py-3">Teléfono</th>
+                                        <th class="px-5 py-3 text-center">Estatus</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-personal" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </section>
+    </main>
+
+    <!-- Footer General -->
+    <footer id="main-footer" class="bg-brand-deepBlue text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-truck-concrete text-brand-teal text-2xl"></i>
+                        <span class="font-extrabold text-white text-xl tracking-tight">Concretos Arciniega</span>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Concretos, Pavimentaciones y Azulejos Arciniega S.A. de C.V. Fuerza y precisión en cada metro cúbico para tus proyectos de construcción.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold uppercase tracking-wider text-sm mb-4">Contacto Directo</h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li class="flex items-center gap-2.5"><i class="fa-solid fa-phone text-brand-cyan"></i> +52 55 4340 4828</li>
+                        <li class="flex items-center gap-2.5"><i class="fa-solid fa-phone text-brand-teal"></i> 722 104 4075</li>
+                        <li class="flex items-center gap-2.5"><i class="fa-solid fa-envelope text-brand-lightCyan"></i> concretos.arciniega@gmail.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold uppercase tracking-wider text-sm mb-4">Planta y Matriz</h4>
+                    <p class="text-sm flex items-start gap-2.5">
+                        <i class="fa-solid fa-location-dot text-brand-cyan mt-1"></i>
+                        <span>Carretera Jilotepec Ixtlahuaca Km 2.4,<br>Bocote Centro, Mun. Jilotepec, Edo. de Méx.</span>
+                    </p>
+                </div>
+            </div>
+            <div class="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+                <p>&copy; 2026 Concretos, Pavimentaciones y Azulejos Arciniega S.A. de C.V. Todos los derechos reservados.</p>
+                <div class="flex gap-4">
+                    <a href="index.html" class="hover:text-brand-cyan transition-colors">Inicio</a>
+                    <a href="Productos.html" class="hover:text-brand-cyan transition-colors">Catálogo</a>
+                    <a href="contacto.html" class="hover:text-brand-cyan transition-colors">Ubicación</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lógica de Navegación y Conexión a MySQL -->
+    <script>
+        const API_URL = '/api';
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            let icon = 'fa-circle-info';
+            if(type === 'success') icon = 'fa-circle-check';
+            if(type === 'error') icon = 'fa-triangle-exclamation';
+
+            toast.innerHTML = `<i class="fa-solid ${icon} text-xl"></i><span class="text-sm font-medium tracking-wide">${message}</span>`;
+            container.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        function toggleMissionVision(selectedCard) {
+            const allCards = document.querySelectorAll('.mv-card');
+            const isAlreadyExpanded = selectedCard.classList.contains('expanded');
+
+            allCards.forEach(card => {
+                card.classList.remove('expanded', 'dimmed');
+                const badge = card.querySelector('.mv-badge');
+                if (badge) badge.innerHTML = '<i class="fa-solid fa-expand mr-1"></i> Ampliar';
+            });
+
+            if (!isAlreadyExpanded) {
+                selectedCard.classList.add('expanded');
+                const activeBadge = selectedCard.querySelector('.mv-badge');
+                if (activeBadge) activeBadge.innerHTML = '<i class="fa-solid fa-compress mr-1"></i> Reducir';
+                allCards.forEach(card => {
+                    if (card !== selectedCard) card.classList.add('dimmed');
+                });
+            }
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            const active = document.getElementById(sectionId);
+            if (active) {
+                active.classList.remove('hidden');
+                active.classList.add('fade-in');
+            }
+
+            const footer = document.getElementById('main-footer');
+            const nav = document.getElementById('main-nav');
+            
+            if (sectionId === 'dashboard') {
+                footer.classList.add('hidden');
+                nav.classList.add('hidden');
+                cargarTablasDashboard();
+            } else {
+                footer.classList.remove('hidden');
+                nav.classList.remove('hidden');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function abrirPortalLogin() {
+            cambiarVistaPortal('login');
+            showSection('login');
+        }
+
+        function cambiarVistaPortal(vista) {
+            const vLogin = document.getElementById('portal-vista-login');
+            const vRegistro = document.getElementById('portal-vista-registro');
+            if (vista === 'registro') {
+                vLogin.classList.add('hidden');
+                vRegistro.classList.remove('hidden');
+                vRegistro.classList.add('fade-in');
+            } else {
+                vRegistro.classList.add('hidden');
+                vLogin.classList.remove('hidden');
+                vLogin.classList.add('fade-in');
+            }
+        }
+
+        function actualizarPlaceholdersLogin() {
+            const role = document.getElementById('login-role').value;
+            if (role === 'admin') {
+                document.getElementById('lbl-login-user').innerText = 'Usuario Administrador';
+                document.getElementById('login-user').placeholder = 'jperez';
+                document.getElementById('lbl-login-pass').innerText = 'Contraseña';
+                document.getElementById('login-pass').placeholder = '••••••••';
+            } else {
+                document.getElementById('lbl-login-user').innerText = 'Correo Electrónico';
+                document.getElementById('login-user').placeholder = 'correo@ejemplo.com';
+                document.getElementById('lbl-login-pass').innerText = 'Teléfono Registrado';
+                document.getElementById('login-pass').placeholder = '10 dígitos';
+            }
+        }
+
+        function actualizarNavbarSesion() {
+            const data = localStorage.getItem('arciniega_user');
+            const user = data ? JSON.parse(data) : null;
+            const area = document.getElementById('nav-portal-area');
+            if (!area) return;
+
+            if (user) {
+                area.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        ${user.rol === 'admin' ? `<button onclick="showSection('dashboard'); showDashboardView('articulos');" class="text-xs font-bold bg-blue-100 text-brand-royal px-3 py-2 rounded-lg hover:bg-blue-200 transition-colors">Panel Admin</button>` : ''}
+                        <span class="text-sm font-bold text-slate-700 bg-sky-100 px-3 py-1.5 rounded-full">
+                            <i class="fa-solid fa-user-check text-brand-royal mr-1"></i> ${user.nombre}
+                        </span>
+                        <button onclick="cerrarSesion()" class="text-xs font-bold text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors">
+                            Salir
+                        </button>
+                    </div>
+                `;
+            } else {
+                area.innerHTML = `
+                    <button onclick="abrirPortalLogin()" class="bg-gradient-to-r from-brand-royal to-brand-cobalt text-white px-6 py-2.5 rounded-full hover:shadow-glow-royal hover:scale-105 transition-all duration-300 font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-user-circle"></i> Portal
+                    </button>
+                `;
+            }
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('arciniega_user');
+            actualizarNavbarSesion();
+            showSection('home');
+            showToast('Sesión cerrada', 'info');
+        }
+
+        async function handleLogin() {
+            const usuario = document.getElementById('login-user').value.trim();
+            const clave = document.getElementById('login-pass').value.trim();
+            const rol = document.getElementById('login-role').value;
+
+            try {
+                const res = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, clave, rol })
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    showToast(data.error || 'Datos incorrectos', 'error');
+                    return;
+                }
+
+                localStorage.setItem('arciniega_user', JSON.stringify(data));
+                actualizarNavbarSesion();
+
+                if (data.rol === 'admin') {
+                    showToast('Bienvenido Administrador', 'success');
+                    setTimeout(() => {
+                        showSection('dashboard');
+                        showDashboardView('articulos');
+                    }, 700);
+                } else {
+                    showToast(`Bienvenido, ${data.nombre}`, 'info');
+                    setTimeout(() => showSection('home'), 700);
+                }
+            } catch (error) {
+                showToast('Enciende node server.js para conectar con MySQL', 'error');
+            }
+        }
+
+        async function handleRegistro() {
+            const payload = {
+                nombre: document.getElementById('reg-nombre').value.trim(),
+                ap_pat: document.getElementById('reg-appat').value.trim(),
+                ap_mat: document.getElementById('reg-apmat').value.trim(),
+                tel1: document.getElementById('reg-tel').value.trim(),
+                email1: document.getElementById('reg-email').value.trim(),
+                calle: document.getElementById('reg-calle').value.trim(),
+                colonia: document.getElementById('reg-colonia').value.trim(),
+                cp: document.getElementById('reg-cp').value.trim(),
+                municipio: document.getElementById('reg-municipio').value.trim(),
+                estado: document.getElementById('reg-estado').value.trim()
+            };
+
+            try {
+                const res = await fetch(`${API_URL}/clientes/registro`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    showToast(data.error || 'No se pudo guardar en la base de datos', 'error');
+                    return;
+                }
+
+                localStorage.setItem('arciniega_user', JSON.stringify(data));
+                actualizarNavbarSesion();
+                showToast('Cuenta guardada en la base de datos', 'success');
+                setTimeout(() => showSection('home'), 800);
+            } catch (error) {
+                showToast('Enciende node server.js para guardar en MySQL', 'error');
+            }
+        }
+
+        function showDashboardView(viewName) {
+            document.querySelectorAll('.dash-view').forEach(view => {
+                view.classList.add('hidden');
+                view.classList.remove('fade-in', 'block');
+            });
+            
+            const target = document.getElementById('view-' + viewName);
+            if(target) {
+                target.classList.remove('hidden');
+                target.classList.add('block', 'fade-in');
+            }
+
+            document.querySelectorAll('.sidebar-link').forEach(btn => {
+                btn.className = "sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white font-semibold transition-all";
+            });
+
+            const activeBtn = document.getElementById('link-' + viewName);
+            if(activeBtn) {
+                activeBtn.className = "sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-brand-cyan text-white font-bold transition-all shadow-md";
+            }
+
+            const titles = {
+                'articulos': 'Control de Inventario',
+                'proveedores': 'Gestión de Proveedores',
+                'clientes': 'Directorio de Clientes',
+                'ventas': 'Historial de Ventas',
+                'vehiculos': 'Control de Flotilla',
+                'personal': 'Gestión de Personal'
+            };
+            document.getElementById('dash-title').innerText = titles[viewName] || 'Dashboard';
+            cargarTablasDashboard();
+        }
+
+        async function cargarTablasDashboard() {
+            try {
+                const [resArt, resProv, resCli, resVen, resVeh, resPer] = await Promise.all([
+                    fetch(`${API_URL}/articulos`),
+                    fetch(`${API_URL}/proveedores`),
+                    fetch(`${API_URL}/clientes`),
+                    fetch(`${API_URL}/ventas`),
+                    fetch(`${API_URL}/vehiculos`),
+                    fetch(`${API_URL}/personal`)
+                ]);
+
+                const articulos = await resArt.json();
+                const proveedores = await resProv.json();
+                const clientes = await resCli.json();
+                const ventas = await resVen.json();
+                const vehiculos = await resVeh.json();
+                const personal = await resPer.json();
+
+                document.getElementById('kpi-total-productos').innerText = articulos.length;
+                document.getElementById('kpi-stock-bajo').innerText = articulos.filter(a => parseFloat(a.stock) <= 20).length;
+                const valorTotal = articulos.reduce((acc, a) => acc + (parseFloat(a.stock) * parseFloat(a.precio_base)), 0);
+                document.getElementById('kpi-valor-inventario').innerText = `$${valorTotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+
+                document.getElementById('tbody-articulos').innerHTML = articulos.map(a => `
+                    <tr class="hover:bg-sky-50">
+                        <td class="px-5 py-3 text-slate-400">#${a.id_articulos}</td>
+                        <td class="px-5 py-3"><p class="font-bold text-slate-800">${a.desc1}</p><span class="text-xs text-slate-400">${a.desc2 || ''}</span></td>
+                        <td class="px-5 py-3 text-center text-base font-bold">${a.stock} <span class="text-xs font-normal text-slate-400">${a.unidad}</span></td>
+                        <td class="px-5 py-3 text-right font-bold">$${parseFloat(a.precio_base).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</td>
+                        <td class="px-5 py-3 text-center"><span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-md">Activo</span></td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('tbody-proveedores').innerHTML = proveedores.map(p => `
+                    <tr class="hover:bg-sky-50">
+                        <td class="px-5 py-3 text-slate-400">#${p.id_proveedor}</td>
+                        <td class="px-5 py-3 font-bold text-slate-800">${p.razon_social}</td>
+                        <td class="px-5 py-3">${p.nombre || '-'}</td>
+                        <td class="px-5 py-3">${p.telefono || '-'}</td>
+                        <td class="px-5 py-3 text-center"><span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-md">Activo</span></td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('tbody-clientes').innerHTML = clientes.map(c => `
+                    <tr class="hover:bg-teal-50/50">
+                        <td class="px-5 py-3 text-slate-400">#${c.id_cliente}</td>
+                        <td class="px-5 py-3 font-bold text-slate-800">${c.nombre} ${c.ap_pat} ${c.ap_mat || ''}</td>
+                        <td class="px-5 py-3">${c.tel1}</td>
+                        <td class="px-5 py-3">${c.email1 || '-'}</td>
+                        <td class="px-5 py-3 text-center"><span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-md">Activo</span></td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('tbody-ventas').innerHTML = ventas.map(v => `
+                    <tr class="hover:bg-green-50/50">
+                        <td class="px-5 py-3 font-bold text-slate-800">${v.folio}</td>
+                        <td class="px-5 py-3">${String(v.fecha_venta).slice(0, 10)}</td>
+                        <td class="px-5 py-3">#${v.id_cliente}</td>
+                        <td class="px-5 py-3 text-right font-bold text-green-700">$${parseFloat(v.total).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</td>
+                        <td class="px-5 py-3 text-center">${v.forma_pago}</td>
+                        <td class="px-5 py-3 text-center"><span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-md">Pagado</span></td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('tbody-vehiculos').innerHTML = vehiculos.map(vh => `
+                    <tr class="hover:bg-blue-50/50">
+                        <td class="px-5 py-3 text-slate-400">#${vh.id_vehiculos}</td>
+                        <td class="px-5 py-3 font-bold text-slate-800">${vh.marca} ${vh.modelo} (${vh.anio})</td>
+                        <td class="px-5 py-3"><span class="px-2 py-1 bg-slate-200 text-xs font-mono rounded">${vh.placa}</span></td>
+                        <td class="px-5 py-3 text-brand-blue font-bold">${vh.capacidad} m3</td>
+                        <td class="px-5 py-3 text-center"><span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-md">Operativo</span></td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('tbody-personal').innerHTML = personal.map(pe => `
+                    <tr class="hover:bg-indigo-50/50">
+                        <td class="px-5 py-3 text-slate-400">#${pe.id_personal}</td>
+                        <td class="px-5 py-3 font-bold text-slate-800">${pe.nombre} ${pe.ap_pat}</td>
+                        <td class="px-5 py-3">${pe.puesto_nombre || 'Puesto #' + pe.id_puestos}</td>
+                        <td class="px-5 py-3">${pe.tel || '-'}</td>
+                        <td class="px-5 py-3 text-center"><span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-md">Activo</span></td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error sincronizando tablas:', error);
+            }
+        }
+
+        actualizarNavbarSesion();
+        showSection('home');
+    </script>
+</body>
+</html>

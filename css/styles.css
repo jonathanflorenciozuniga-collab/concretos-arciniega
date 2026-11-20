@@ -1,0 +1,51 @@
+/* Importar fuentes desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body { 
+    font-family: 'Inter', sans-serif; 
+}
+
+/* Efecto de cristal (Glassmorphism) para los paneles */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Estilos de transición para los botones del menú lateral */
+.sidebar-link { 
+    transition: all 0.3s ease; 
+}
+
+.sidebar-link.active {
+    background: linear-gradient(90deg, #0d9488 0%, #0891b2 100%);
+    color: white;
+    border-left: 4px solid #67e8f9;
+}
+
+.sidebar-link:hover:not(.active) {
+    background: rgba(255,255,255,0.1);
+}
+
+/* Configuración de las vistas dinámicas de las tablas */
+.view-section { 
+    display: none; 
+}
+
+.view-section.active { 
+    display: block; 
+    animation: fadeIn 0.4s ease-in-out; 
+}
+
+/* Animación de entrada al cambiar de tabla */
+@keyframes fadeIn { 
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    } 
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    } 
+}

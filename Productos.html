@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concretos Arciniega - Catálogo de Productos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            cyan: '#06b6d4',
+                            lightCyan: '#22d3ee',
+                            blue: '#3b82f6',
+                            deepBlue: '#0f172a',
+                            teal: '#14b8a6',
+                            emerald: '#10b981',
+                            bgLight: '#f0f9ff'
+                        }
+                    },
+                    boxShadow: {
+                        'glow-cyan': '0 0 20px rgba(6, 182, 212, 0.4)',
+                        'soft': '0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.01)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(12px); }
+        #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 60; display: flex; flex-direction: column; gap: 0.75rem; }
+        .toast { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; border-radius: 1rem; background: #0f172a; color: #fff; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25); }
+        .toast-success { border-left: 4px solid #10b981; }
+        .toast-error { border-left: 4px solid #ef4444; }
+        .toast-info { border-left: 4px solid #06b6d4; }
+    </style>
+</head>
+<body class="bg-brand-bgLight text-slate-800 font-sans flex flex-col min-h-screen selection:bg-brand-cyan selection:text-white">
+
+    <div id="toast-container"></div>
+
+    <nav class="glass-panel sticky top-0 z-50 shadow-sm border-b border-sky-100/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <a href="index.html" class="flex items-center cursor-pointer group">
+                    <div class="bg-gradient-to-br from-brand-cyan to-brand-teal p-2.5 rounded-xl shadow-lg group-hover:shadow-glow-cyan transition-all duration-300">
+                        <i class="fa-solid fa-truck-concrete text-white text-2xl"></i>
+                    </div>
+                    <span class="font-extrabold text-2xl ml-3 bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-brand-cyan tracking-tight">Arciniega</span>
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-2">
+                    <a href="index.html" class="px-4 py-2 text-slate-600 font-semibold rounded-lg hover:bg-sky-50 hover:text-brand-cyan transition-colors">Inicio</a>
+                    <a href="Productos.html" class="px-4 py-2 bg-sky-50 text-brand-cyan font-bold rounded-lg transition-colors">Productos</a>
+                    <a href="contacto.html" class="px-4 py-2 text-slate-600 font-semibold rounded-lg hover:bg-sky-50 hover:text-brand-cyan transition-colors">Contacto</a>
+                    <div class="h-6 w-px bg-slate-200 mx-2"></div>
+                    <div id="nav-sesion-area"></div>
+                </div>
+
+                <div class="flex items-center md:hidden">
+                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-slate-600 hover:text-brand-cyan p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-sky-100 absolute w-full shadow-lg">
+            <div class="px-4 py-4 space-y-2">
+                <a href="index.html" class="block w-full text-left px-4 py-3 rounded-lg text-slate-700 font-bold hover:bg-sky-50">Inicio</a>
+                <a href="Productos.html" class="block w-full text-left px-4 py-3 rounded-lg bg-sky-50 text-brand-cyan font-bold">Productos</a>
+                <a href="contacto.html" class="block w-full text-left px-4 py-3 rounded-lg text-slate-700 font-bold hover:bg-sky-50">Contacto</a>
+                <a href="inicio_secion.html" class="block w-full text-center px-4 py-3 mt-4 rounded-xl bg-brand-cyan text-white font-bold shadow-md">Iniciar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative overflow-hidden bg-brand-deepBlue text-white py-14">
+        <div class="absolute inset-0 z-0 opacity-30">
+            <div class="absolute -top-20 -left-20 w-80 h-80 bg-brand-cyan rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
+            <div class="absolute bottom-0 -right-20 w-80 h-80 bg-brand-teal rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
+        </div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 text-center">
+            <span class="inline-block py-1 px-4 rounded-full bg-cyan-900/50 border border-brand-cyan/40 text-brand-lightCyan text-xs font-bold tracking-widest mb-4 uppercase">
+                Materiales y Concretos Certificados
+            </span>
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight">Catálogo de Concretos y Derivados</h1>
+            <p class="text-slate-300 max-w-2xl mx-auto text-base">
+                Consulta precios, presentaciones y disponibilidad de todos nuestros productos para tu obra.
+            </p>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-10 w-full">
+
+        <div class="glass-panel p-5 rounded-2xl shadow-soft mb-10 flex flex-col lg:flex-row gap-4 justify-between items-center border border-sky-100">
+            <div id="category-filters" class="flex flex-wrap gap-2 justify-center lg:justify-start"></div>
+
+            <div class="relative w-full lg:w-72">
+                <i class="fa-solid fa-search absolute left-3.5 top-3 text-slate-400"></i>
+                <input type="search" id="buscador-productos" autocomplete="off" oninput="aplicarFiltros()" placeholder="Buscar producto o marca..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan">
+            </div>
+        </div>
+
+        <div id="productos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            <div class="col-span-full text-center py-12 text-slate-500 font-semibold">
+                <i class="fa-solid fa-spinner fa-spin text-brand-cyan text-2xl mb-2 block"></i>
+                Cargando catálogo desde la base de datos...
+            </div>
+        </div>
+
+        <section class="bg-white rounded-3xl p-8 shadow-soft border border-sky-100">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                    <span class="text-brand-teal font-bold tracking-widest uppercase text-xs">Especificaciones Técnicas</span>
+                    <h2 class="text-2xl font-extrabold text-slate-800 mt-1">Resistencias de Concreto Disponibles</h2>
+                </div>
+                <a href="contacto.html" class="bg-brand-deepBlue text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-brand-cyan transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-headset"></i> Ayuda de un Asesor
+                </a>
+            </div>
+            <div id="resistencias-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"></div>
+        </section>
+
+    </main>
+
+    <!-- Modal: Opciones al intentar Comprar sin Sesión Iniciada -->
+    <div id="modal-login-requerido" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 text-center">
+            <div class="w-16 h-16 mx-auto bg-cyan-50 text-brand-cyan rounded-full flex items-center justify-center text-3xl mb-4">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+            <h3 class="text-2xl font-extrabold text-slate-800 mb-2">Continúa con tu Compra</h3>
+            <p class="text-slate-600 text-sm mb-6">
+                Para realizar tu compra en línea inicia sesión con tu cuenta, o solicita apoyo directo de uno de nuestros asesores.
+            </p>
+            <div class="space-y-3">
+                <a href="inicio_secion.html" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-teal text-white font-bold text-sm shadow-md hover:shadow-glow-cyan transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión para Comprar
+                </a>
+                <a href="contacto.html" class="w-full py-3 rounded-xl bg-sky-50 text-brand-blue font-bold text-sm hover:bg-sky-100 transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-headset"></i> Pedir Ayuda a un Asesor
+                </a>
+                <button onclick="document.getElementById('modal-login-requerido').classList.add('hidden')" class="w-full py-2.5 rounded-xl text-slate-400 font-semibold text-xs hover:text-slate-600 transition-colors">
+                    Seguir viendo el catálogo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Formulario de Pedido -->
+    <div id="modal-pedido" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-slate-100">
+            <div class="flex justify-between items-center mb-4">
+                <span class="px-3 py-1 rounded-full bg-teal-50 text-brand-teal text-xs font-bold uppercase">Confirmar Compra</span>
+                <button onclick="cerrarModalPedido()" class="text-slate-400 hover:text-slate-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <h3 id="pedido-producto-nombre" class="font-extrabold text-slate-800 text-xl mb-1"></h3>
+            <p id="pedido-producto-precio" class="text-sm text-brand-cyan font-bold mb-5"></p>
+            
+            <form onsubmit="guardarPedidoBD(event)" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Cantidad *</label>
+                        <input type="number" id="pedido-cantidad" min="1" step="0.5" value="1" oninput="actualizarTotalPedido()" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Fecha de Entrega *</label>
+                        <input type="date" id="pedido-fecha" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Dirección de Entrega en Obra *</label>
+                    <input type="text" id="pedido-direccion" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Indicaciones de Descarga (Opcional)</label>
+                    <input type="text" id="pedido-especificaciones" placeholder="Ej. Tiro directo, horario matutino..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-cyan">
+                </div>
+                <div class="p-4 bg-sky-50 rounded-xl flex justify-between items-center border border-sky-100">
+                    <span class="text-sm font-semibold text-slate-600">Total Estimado:</span>
+                    <span id="pedido-total" class="text-xl font-extrabold text-slate-800">$0.00</span>
+                </div>
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-teal text-white font-bold shadow-md hover:shadow-glow-cyan transition-all">
+                    Finalizar Pedido
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="bg-brand-deepBlue text-slate-400 py-12 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-truck-concrete text-brand-teal text-2xl"></i>
+                        <span class="font-extrabold text-white text-xl tracking-tight">Concretos Arciniega</span>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Concretos, Pavimentaciones y Azulejos Arciniega S.A. de C.V. Fuerza y precisión en cada metro cúbico.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold uppercase tracking-wider text-sm mb-4">Contacto Directo</h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li class="flex items-center gap-2.5"><i class="fa-solid fa-phone text-brand-cyan"></i> +52 55 4340 4828</li>
+                        <li class="flex items-center gap-2.5"><i class="fa-solid fa-phone text-brand-teal"></i> 722 104 4075</li>
+                        <li class="flex items-center gap-2.5"><i class="fa-solid fa-envelope text-brand-lightCyan"></i> concretos.arciniega@gmail.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold uppercase tracking-wider text-sm mb-4">Planta y Matriz</h4>
+                    <p class="text-sm flex items-start gap-2.5">
+                        <i class="fa-solid fa-location-dot text-brand-cyan mt-1"></i>
+                        <span>Carretera Jilotepec Ixtlahuaca Km 2.4,<br>Bocote Centro, Mun. Jilotepec, Edo. de Méx.</span>
+                    </p>
+                </div>
+            </div>
+            <div class="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+                <p>&copy; 2026 Concretos, Pavimentaciones y Azulejos Arciniega S.A. de C.V. Todos los derechos reservados.</p>
+                <div class="flex gap-4">
+                    <a href="index.html" class="hover:text-brand-cyan transition-colors">Inicio</a>
+                    <a href="Productos.html" class="hover:text-brand-cyan transition-colors">Catálogo</a>
+                    <a href="contacto.html" class="hover:text-brand-cyan transition-colors">Ubicación</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = '/api';
+        let catalogoProductos = [];
+        let categoriaActual = 'todos';
+        let productoSeleccionado = null;
+        let huellaAnterior = '';
+
+        function obtenerUsuarioSesion() {
+            const data = localStorage.getItem('arciniega_user');
+            return data ? JSON.parse(data) : null;
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('arciniega_user');
+            actualizarBarraSesion();
+            notificar('Sesión cerrada correctamente', 'info');
+        }
+
+        function actualizarBarraSesion() {
+            const user = obtenerUsuarioSesion();
+            const area = document.getElementById('nav-sesion-area');
+            if (user) {
+                area.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-bold text-slate-700 bg-sky-100 px-3 py-1.5 rounded-full">
+                            <i class="fa-solid fa-user-check text-brand-teal mr-1"></i> ${user.nombre}
+                        </span>
+                        <button onclick="cerrarSesion()" class="text-xs font-bold text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors">
+                            Salir
+                        </button>
+                    </div>
+                `;
+            } else {
+                area.innerHTML = `
+                    <a href="inicio_secion.html" class="bg-gradient-to-r from-brand-cyan to-brand-blue text-white px-6 py-2.5 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-300 font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-user-circle"></i> Iniciar Sesión
+                    </a>
+                `;
+            }
+        }
+
+        function notificar(mensaje, tipo = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${tipo}`;
+            toast.innerHTML = `<i class="fa-solid ${tipo === 'error' ? 'fa-triangle-exclamation' : 'fa-circle-check'} text-xl"></i><span class="text-sm font-medium">${mensaje}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        function obtenerIconoCategoria(categoria) {
+            const cat = (categoria || '').toLowerCase();
+            if (cat.includes('concreto')) return 'fa-truck-concrete';
+            if (cat.includes('acero')) return 'fa-bars-staggered';
+            if (cat.includes('mampostería')) return 'fa-cubes-stacked';
+            if (cat.includes('químico')) return 'fa-flask';
+            if (cat.includes('ferretería') || cat.includes('herramienta')) return 'fa-screwdriver-wrench';
+            return 'fa-layer-group';
+        }
+
+        function renderizarFiltrosCategoria(lista) {
+            const categoriasUnicas = ['todos', ...new Set(lista.map(p => p.categoria))];
+            const contenedor = document.getElementById('category-filters');
+            contenedor.innerHTML = categoriasUnicas.map(cat => {
+                const activa = cat === categoriaActual;
+                const label = cat === 'todos' ? 'Todos' : cat;
+                const clases = activa
+                    ? 'px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-brand-cyan to-brand-teal text-white shadow-md transition-all'
+                    : 'px-4 py-2 rounded-xl text-sm font-semibold bg-white text-slate-600 hover:bg-sky-50 border border-slate-200 transition-all';
+                return `<button onclick="filtrarCategoria('${cat}')" class="${clases}">${label}</button>`;
+            }).join('');
+        }
+
+        function renderizarProductos(lista) {
+            const grid = document.getElementById('productos-grid');
+            if (!lista.length) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 font-semibold">No hay productos registrados con ese criterio en la base de datos.</div>`;
+                return;
+            }
+
+            grid.innerHTML = lista.map(item => {
+                const stockNum = parseFloat(item.stock);
+                const precioNum = parseFloat(item.precio_base);
+                const disponibilidad = stockNum > 0
+                    ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Disponible (${stockNum} ${item.unidad})</span>`
+                    : `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Agotado</span>`;
+
+                return `
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-soft hover:-translate-y-1 transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="px-3 py-1 rounded-lg bg-sky-50 text-brand-cyan text-xs font-bold">${item.categoria}</span>
+                                <div class="w-10 h-10 rounded-xl bg-teal-50 text-brand-teal flex items-center justify-center text-lg">
+                                    <i class="fa-solid ${obtenerIconoCategoria(item.categoria)}"></i>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-extrabold text-slate-800 mb-1">${item.desc1}</h3>
+                            <p class="text-sm text-brand-teal font-semibold mb-3">${item.desc2 || item.tipo}</p>
+                            <p class="text-xs text-slate-400 mb-4"><i class="fa-solid fa-award text-brand-cyan mr-1"></i> Marca / Prov: <strong class="text-slate-600">${item.proveedor}</strong></p>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100">
+                            <div class="flex justify-between items-end mb-4">
+                                <div>
+                                    <span class="text-xs text-slate-400 block">Costo por ${item.unidad}</span>
+                                    <span class="text-2xl font-extrabold text-slate-800">$${precioNum.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>
+                                    <span class="text-xs font-semibold text-slate-400">MXN</span>
+                                </div>
+                                ${disponibilidad}
+                            </div>
+                            <button onclick="intentarComprar(${item.id_articulos})" class="w-full py-3 rounded-xl bg-slate-800 text-white font-bold text-sm hover:bg-gradient-to-r hover:from-brand-cyan hover:to-brand-teal transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cart-plus"></i> Comprar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderizarResistencias(lista) {
+            document.getElementById('resistencias-grid').innerHTML = lista.map(r => `
+                <div class="p-4 rounded-2xl bg-sky-50/70 border border-sky-100 hover:border-brand-cyan transition-colors">
+                    <div class="flex items-center gap-2 text-brand-cyan font-bold text-xs mb-1">
+                        <i class="fa-solid fa-shield-halved"></i> GRADO #${r.id_resistencia}
+                    </div>
+                    <p class="font-bold text-slate-800 text-sm">${r.nombre}</p>
+                </div>
+            `).join('');
+        }
+
+        function filtrarCategoria(cat) {
+            categoriaActual = cat;
+            renderizarFiltrosCategoria(catalogoProductos);
+            aplicarFiltros();
+        }
+
+        function aplicarFiltros() {
+            const texto = document.getElementById('buscador-productos').value.toLowerCase().trim();
+            const filtrados = catalogoProductos.filter(item => {
+                const coincideCat = categoriaActual === 'todos' || item.categoria === categoriaActual;
+                const coincideTexto = item.desc1.toLowerCase().includes(texto) ||
+                    (item.desc2 && item.desc2.toLowerCase().includes(texto)) ||
+                    (item.proveedor && item.proveedor.toLowerCase().includes(texto));
+                return coincideCat && coincideTexto;
+            });
+            renderizarProductos(filtrados);
+        }
+
+        function intentarComprar(idArticulo) {
+            const user = obtenerUsuarioSesion();
+
+            if (!user) {
+                document.getElementById('modal-login-requerido').classList.remove('hidden');
+                return;
+            }
+
+            if (user.rol !== 'cliente') {
+                notificar('Inicia sesión con una cuenta de Cliente para comprar', 'error');
+                return;
+            }
+
+            productoSeleccionado = catalogoProductos.find(p => p.id_articulos === idArticulo);
+            if (!productoSeleccionado) return;
+
+            const manana = new Date();
+            manana.setDate(manana.getDate() + 1);
+            document.getElementById('pedido-producto-nombre').innerText = `${productoSeleccionado.desc1} ${productoSeleccionado.desc2 ? '- ' + productoSeleccionado.desc2 : ''}`;
+            document.getElementById('pedido-producto-precio').innerText = `$${parseFloat(productoSeleccionado.precio_base).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN / ${productoSeleccionado.unidad}`;
+            document.getElementById('pedido-cantidad').value = 1;
+            document.getElementById('pedido-fecha').value = manana.toISOString().split('T')[0];
+            document.getElementById('pedido-direccion').value = user.direccion || '';
+            document.getElementById('pedido-especificaciones').value = '';
+            actualizarTotalPedido();
+
+            document.getElementById('modal-pedido').classList.remove('hidden');
+        }
+
+        function cerrarModalPedido() {
+            document.getElementById('modal-pedido').classList.add('hidden');
+        }
+
+        function actualizarTotalPedido() {
+            if (!productoSeleccionado) return;
+            const cant = parseFloat(document.getElementById('pedido-cantidad').value) || 0;
+            const total = cant * parseFloat(productoSeleccionado.precio_base);
+            document.getElementById('pedido-total').innerText = `$${total.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`;
+        }
+
+        async function guardarPedidoBD(e) {
+            e.preventDefault();
+            const user = obtenerUsuarioSesion();
+            if (!user || !productoSeleccionado) return;
+
+            const payload = {
+                id_cliente: user.id_cliente,
+                id_articulos: productoSeleccionado.id_articulos,
+                cantidad: parseFloat(document.getElementById('pedido-cantidad').value),
+                precio_unit: parseFloat(productoSeleccionado.precio_base),
+                f_e_s: document.getElementById('pedido-fecha').value,
+                direccion_entrega: document.getElementById('pedido-direccion').value.trim(),
+                especificaciones: document.getElementById('pedido-especificaciones').value.trim()
+            };
+
+            try {
+                const res = await fetch(`${API_URL}/pedidos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    notificar(data.error || 'No se pudo registrar el pedido', 'error');
+                    return;
+                }
+
+                cerrarModalPedido();
+                notificar(`Compra registrada con folio ${data.folio}`, 'success');
+            } catch (error) {
+                notificar('No se pudo conectar con la base de datos', 'error');
+            }
+        }
+
+        async function cargarDatosDesdeBD() {
+            try {
+                const [resArt, resRes] = await Promise.all([
+                    fetch(`${API_URL}/articulos`),
+                    fetch(`${API_URL}/resistencias`)
+                ]);
+
+                if (!resArt.ok || !resRes.ok) throw new Error('Error de consulta');
+
+                const articulos = await resArt.json();
+                const resistencias = await resRes.json();
+
+                const nuevaHuella = JSON.stringify(articulos);
+                if (nuevaHuella !== huellaAnterior) {
+                    if (huellaAnterior !== '' && articulos.length > catalogoProductos.length) {
+                        notificar('Nuevos productos disponibles en el catálogo', 'success');
+                    }
+                    huellaAnterior = nuevaHuella;
+                    catalogoProductos = articulos;
+                    renderizarFiltrosCategoria(catalogoProductos);
+                    aplicarFiltros();
+                }
+
+                renderizarResistencias(resistencias);
+            } catch (error) {
+                if (catalogoProductos.length === 0) {
+                    document.getElementById('productos-grid').innerHTML = `
+                        <div class="col-span-full text-center py-12 text-slate-500 font-semibold">
+                            Inicia el servidor en tu terminal (<code class="bg-slate-200 px-2 py-1 rounded">node server.js</code>) para visualizar los productos de MySQL.
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        document.getElementById('buscador-productos').value = '';
+        actualizarBarraSesion();
+        cargarDatosDesdeBD();
+        setInterval(cargarDatosDesdeBD, 3000);
+    </script>
+</body>
+</html>

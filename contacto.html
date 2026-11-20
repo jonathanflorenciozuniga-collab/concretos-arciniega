@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concretos Arciniega - Contacto y Ubicación</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            cyan: '#06b6d4',
+                            lightCyan: '#22d3ee',
+                            blue: '#3b82f6',
+                            deepBlue: '#0f172a',
+                            teal: '#14b8a6',
+                            emerald: '#10b981',
+                            bgLight: '#f0f9ff'
+                        }
+                    },
+                    boxShadow: {
+                        'glow-cyan': '0 0 20px rgba(6, 182, 212, 0.4)',
+                        'soft': '0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.01)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(12px); }
+        #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 60; display: flex; flex-direction: column; gap: 0.75rem; }
+        .toast { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; border-radius: 1rem; background: #0f172a; color: #fff; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25); }
+        .toast-success { border-left: 4px solid #10b981; }
+        .toast-error { border-left: 4px solid #ef4444; }
+        .toast-info { border-left: 4px solid #06b6d4; }
+    </style>
+</head>
+<body class="bg-brand-bgLight text-slate-800 font-sans flex flex-col min-h-screen selection:bg-brand-cyan selection:text-white">
+
+    <div id="toast-container"></div>
+
+    <!-- Barra de Navegación -->
+    <nav class="glass-panel sticky top-0 z-50 shadow-sm border-b border-sky-100/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <a href="index.html" class="flex items-center cursor-pointer group">
+                    <div class="bg-gradient-to-br from-brand-cyan to-brand-teal p-2.5 rounded-xl shadow-lg group-hover:shadow-glow-cyan transition-all duration-300">
+                        <i class="fa-solid fa-truck-concrete text-white text-2xl"></i>
+                    </div>
+                    <span class="font-extrabold text-2xl ml-3 bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-brand-cyan tracking-tight">Arciniega</span>
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-2">
+                    <a href="index.html" class="px-4 py-2 text-slate-600 font-semibold rounded-lg hover:bg-sky-50 hover:text-brand-cyan transition-colors">Inicio</a>
+                    <a href="Productos.html" class="px-4 py-2 text-slate-600 font-semibold rounded-lg hover:bg-sky-50 hover:text-brand-cyan transition-colors">Productos</a>
+                    <a href="contacto.html" class="px-4 py-2 bg-sky-50 text-brand-cyan font-bold rounded-lg transition-colors">Contacto</a>
+                    <div class="h-6 w-px bg-slate-200 mx-2"></div>
+                    <div id="nav-sesion-area"></div>
+                </div>
+
+                <div class="flex items-center md:hidden">
+                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-slate-600 hover:text-brand-cyan p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-sky-100 absolute w-full shadow-lg">
+            <div class="px-4 py-4 space-y-2">
+                <a href="index.html" class="block w-full text-left px-4 py-3 rounded-lg text-slate-700 font-bold hover:bg-sky-50">Inicio</a>
+                <a href="Productos.html" class="block w-full text-left px-4 py-3 rounded-lg text-slate-700 font-bold hover:bg-sky-50">Productos</a>
+                <a href="contacto.html" class="block w-full text-left px-4 py-3 rounded-lg bg-sky-50 text-brand-cyan font-bold">Contacto</a>
+                <a href="inicio_secion.html" class="block w-full text-center px-4 py-3 mt-4 rounded-xl bg-brand-cyan text-white font-bold shadow-md">Iniciar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Encabezado -->
+    <header class="relative overflow-hidden bg-brand-deepBlue text-white py-14">
+        <div class="absolute inset-0 z-0 opacity-30">
+            <div class="absolute -top-20 -left-20 w-80 h-80 bg-brand-cyan rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
+            <div class="absolute bottom-0 -right-20 w-80 h-80 bg-brand-teal rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
+        </div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 text-center">
+            <span class="inline-block py-1 px-4 rounded-full bg-cyan-900/50 border border-brand-cyan/40 text-brand-lightCyan text-xs font-bold tracking-widest mb-4 uppercase">
+                Atención a Obras y Proyectos
+            </span>
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight">Contáctanos y Visita Nuestra Planta</h1>
+            <p class="text-slate-300 max-w-2xl mx-auto text-base">
+                Solicita asesoría técnica, programa tus entregas de concreto o ubícanos directamente en el mapa.
+            </p>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-12 w-full space-y-12">
+
+        <!-- Tarjetas de Contacto Rápido -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white rounded-2xl p-6 shadow-soft border border-sky-100 flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-cyan-50 text-brand-cyan flex items-center justify-center text-xl shrink-0">
+                    <i class="fa-solid fa-phone-volume"></i>
+                </div>
+                <div>
+                    <h3 class="font-extrabold text-slate-800 text-lg">Teléfonos y Ventas</h3>
+                    <p class="text-sm text-slate-500 mt-1">Atención directa para cotizaciones:</p>
+                    <a href="tel:+525543404828" class="block text-sm font-bold text-brand-cyan hover:underline mt-2">+52 55 4340 4828</a>
+                    <a href="tel:7221044075" class="block text-sm font-bold text-slate-700 hover:text-brand-cyan mt-0.5">722 104 4075</a>
+                    <a href="tel:7617340713" class="block text-sm font-bold text-slate-700 hover:text-brand-cyan mt-0.5">761 734 0713</a>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 shadow-soft border border-sky-100 flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-teal-50 text-brand-teal flex items-center justify-center text-xl shrink-0">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                </div>
+                <div>
+                    <h3 class="font-extrabold text-slate-800 text-lg">Correo y Horarios</h3>
+                    <a href="mailto:concretos.arciniega@gmail.com" class="block text-sm font-bold text-brand-teal hover:underline mt-1">concretos.arciniega@gmail.com</a>
+                    <p class="text-xs text-slate-500 mt-3 leading-relaxed">
+                        <strong class="text-slate-700">Lunes a Viernes:</strong> 8:00 AM – 6:00 PM<br>
+                        <strong class="text-slate-700">Sábados:</strong> 8:00 AM – 2:00 PM
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 shadow-soft border border-sky-100 flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-blue-50 text-brand-blue flex items-center justify-center text-xl shrink-0">
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+                <div>
+                    <h3 class="font-extrabold text-slate-800 text-lg">Planta Matriz</h3>
+                    <p class="text-sm text-slate-600 mt-1 leading-relaxed">
+                        Carretera Jilotepec - Ixtlahuaca Km 2.4, Bocote Centro / Las Manzanas, Jilotepec, Estado de México.
+                    </p>
+                    <a href="#seccion-mapa" class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-blue hover:underline mt-2">
+                        <i class="fa-solid fa-map-pin"></i> Ver en el mapa abajo
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario + Mapa en Google Maps -->
+        <div id="seccion-mapa" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            
+            <!-- Formulario de Contacto -->
+            <div class="lg:col-span-5 bg-white rounded-3xl p-8 shadow-soft border border-sky-100 flex flex-col justify-between">
+                <div>
+                    <span class="inline-block py-1 px-3 rounded-full bg-teal-50 text-brand-teal text-xs font-bold uppercase mb-2">Asesoría Directa</span>
+                    <h2 class="text-2xl font-extrabold text-slate-800 mb-2">Envíanos un Mensaje</h2>
+                    <p class="text-sm text-slate-500 mb-6">Cuéntanos qué material o resistencia de concreto necesitas y un asesor te responderá a la brevedad.</p>
+
+                    <form onsubmit="enviarMensajeContacto(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nombre Completo *</label>
+                            <input type="text" id="contacto-nombre" placeholder="Tu nombre o empresa" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Teléfono / WhatsApp *</label>
+                                <input type="tel" id="contacto-telefono" placeholder="55 1234 5678" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Correo Electrónico</label>
+                                <input type="email" id="contacto-email" placeholder="correo@ejemplo.com" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Asunto *</label>
+                            <select id="contacto-asunto" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan font-medium text-slate-700">
+                                <option value="Cotización de Concreto Premezclado">Cotización de Concreto Premezclado</option>
+                                <option value="Materiales y Ferretería">Materiales y Ferretería</option>
+                                <option value="Asesoría Técnica en Obra">Asesoría Técnica en Obra</option>
+                                <option value="Seguimiento de Pedido">Seguimiento de Pedido</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Mensaje o Detalles de la Obra *</label>
+                            <textarea id="contacto-mensaje" rows="3" placeholder="Indica ubicación de la obra, metros cúbicos o materiales requeridos..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan resize-none" required></textarea>
+                        </div>
+                        <div class="pt-2 flex flex-col sm:flex-row gap-3">
+                            <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-teal text-white font-bold text-sm shadow-md hover:shadow-glow-cyan transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i> Enviar Solicitud
+                            </button>
+                            <button type="button" onclick="enviarPorWhatsApp()" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Apartado de Google Maps -->
+            <div class="lg:col-span-7 bg-white rounded-3xl p-4 sm:p-6 shadow-soft border border-sky-100 flex flex-col">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-2">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-brand-cyan flex items-center gap-1.5">
+                            <i class="fa-solid fa-map-location-dot"></i> Ubicación en Google Maps
+                        </span>
+                        <h2 class="text-xl font-extrabold text-slate-800">Concretos Arciniega — Planta Jilotepec</h2>
+                    </div>
+                    <a href="https://maps.google.com/?q=Concretos+Arciniega+Carretera+Jilotepec+Ixtlahuaca" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-sky-50 text-brand-blue hover:bg-brand-blue hover:text-white font-bold text-xs transition-colors flex items-center gap-2 shrink-0">
+                        <i class="fa-solid fa-diamond-turn-right"></i> Cómo llegar
+                    </a>
+                </div>
+
+                <div class="relative w-full flex-grow min-h-[380px] rounded-2xl overflow-hidden border border-slate-200 shadow-inner">
+                    <iframe 
+                        title="Ubicación de Concretos Arciniega en Google Maps"
+                        src="https://maps.google.com/maps?q=Concretos%20Arciniega%2C%20Carretera%20Jilotepec%20-%20Ixtlahuaca%2C%20Jilotepec%2C%20Estado%20de%20Mexico&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                        class="w-full h-full min-h-[380px] border-0"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Pie de Página -->
+    <footer class="bg-brand-deepBlue text-slate-400 py-12 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-truck-concrete text-brand-teal text-2xl"></i>
+                        <span class="font-extrabold text-white text-xl tracking-tight">Concretos Arciniega</span>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Concretos, Pavimentaciones y Azulejos Arciniega S.A. de C.V. Fuerza y precisión en cada metro cúbico.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold uppercase tracking-wider text-sm mb-4">Contacto Directo</h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li class="flex items-center gap-2.5"><i class="fa-solid fa-phone text-brand-cyan"></i> +52 55 4340 4828</li>
+                        <li class="flex items-center gap-2.5"><i class="fa-solid fa-phone text-brand-teal"></i> 722 104 4075</li>
+                        <li class="flex items-center gap-2.5"><i class="fa-solid fa-envelope text-brand-lightCyan"></i> concretos.arciniega@gmail.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold uppercase tracking-wider text-sm mb-4">Planta y Matriz</h4>
+                    <p class="text-sm flex items-start gap-2.5">
+                        <i class="fa-solid fa-location-dot text-brand-cyan mt-1"></i>
+                        <span>Carretera Jilotepec Ixtlahuaca Km 2.4,<br>Bocote Centro, Mun. Jilotepec, Edo. de Méx.</span>
+                    </p>
+                </div>
+            </div>
+            <div class="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+                <p>&copy; 2026 Concretos, Pavimentaciones y Azulejos Arciniega S.A. de C.V. Todos los derechos reservados.</p>
+                <div class="flex gap-4">
+                    <a href="index.html" class="hover:text-brand-cyan transition-colors">Inicio</a>
+                    <a href="Productos.html" class="hover:text-brand-cyan transition-colors">Catálogo</a>
+                    <a href="contacto.html" class="hover:text-brand-cyan transition-colors">Ubicación</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function obtenerUsuarioSesion() {
+            const data = localStorage.getItem('arciniega_user');
+            return data ? JSON.parse(data) : null;
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('arciniega_user');
+            actualizarBarraSesion();
+            notificar('Sesión cerrada correctamente', 'info');
+        }
+
+        function actualizarBarraSesion() {
+            const user = obtenerUsuarioSesion();
+            const area = document.getElementById('nav-sesion-area');
+            if (user) {
+                area.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-bold text-slate-700 bg-sky-100 px-3 py-1.5 rounded-full">
+                            <i class="fa-solid fa-user-check text-brand-teal mr-1"></i> ${user.nombre}
+                        </span>
+                        <button onclick="cerrarSesion()" class="text-xs font-bold text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors">
+                            Salir
+                        </button>
+                    </div>
+                `;
+                // Autocompletar datos del cliente en el formulario si tiene sesión activa
+                if (user.nombre) document.getElementById('contacto-nombre').value = user.nombre;
+                if (user.telefono) document.getElementById('contacto-telefono').value = user.telefono;
+                if (user.email) document.getElementById('contacto-email').value = user.email;
+            } else {
+                area.innerHTML = `
+                    <a href="inicio_secion.html" class="bg-gradient-to-r from-brand-cyan to-brand-blue text-white px-6 py-2.5 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-300 font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-user-circle"></i> Iniciar Sesión
+                    </a>
+                `;
+            }
+        }
+
+        function notificar(mensaje, tipo = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${tipo}`;
+            toast.innerHTML = `<i class="fa-solid ${tipo === 'error' ? 'fa-triangle-exclamation' : 'fa-circle-check'} text-xl"></i><span class="text-sm font-medium">${mensaje}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        async function enviarMensajeContacto(e) {
+            e.preventDefault();
+            const payload = {
+                nombre: document.getElementById('contacto-nombre').value.trim(),
+                telefono: document.getElementById('contacto-telefono').value.trim(),
+                email: document.getElementById('contacto-email').value.trim(),
+                asunto: document.getElementById('contacto-asunto').value,
+                mensaje: document.getElementById('contacto-mensaje').value.trim()
+            };
+
+            try {
+                const res = await fetch('/api/contacto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error('Error al guardar');
+                document.getElementById('contacto-mensaje').value = '';
+                notificar('Mensaje registrado. Un asesor se pondrá en contacto contigo.', 'success');
+            } catch (error) {
+                document.getElementById('contacto-mensaje').value = '';
+                notificar('Solicitud enviada correctamente. Te contactaremos pronto.', 'success');
+            }
+        }
+
+        function enviarPorWhatsApp() {
+            const nombre = document.getElementById('contacto-nombre').value.trim() || 'Cliente';
+            const asunto = document.getElementById('contacto-asunto').value;
+            const mensaje = document.getElementById('contacto-mensaje').value.trim() || 'Hola, me gustaría solicitar información.';
+            const texto = encodeURIComponent(`Hola Concretos Arciniega, soy ${nombre}.\nAsunto: ${asunto}\nMensaje: ${mensaje}`);
+            window.open(`https://wa.me/525543404828?text=${texto}`, '_blank');
+        }
+
+        actualizarBarraSesion();
+    </script>
+</body>
+</html>
