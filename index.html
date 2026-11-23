@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
+
+<!-- =========================================================================
+     BLOQUE 1: CONFIGURACIÓN DEL DOCUMENTO, LIBRERÍAS Y PALETA DE COLORES
+     Define la codificación, vista adaptable en móviles, el título oficial de
+     la empresa, la carga de Tailwind CSS, iconos FontAwesome, tipografía Inter
+     y la configuración personalizada de colores y sombras corporativas.
+     ========================================================================= -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Construcciones y Pavimentaciones Arciniega S.A. de C.V.</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Tailwind Config -->
     <script>
         tailwind.config = {
             theme: {
@@ -24,15 +25,15 @@
                     },
                     colors: {
                         brand: {
-                            cyan: '#06b6d4',      /* Cyan 500 - Principal vistoso */
-                            lightCyan: '#22d3ee', /* Cyan 400 */
-                            blue: '#3b82f6',      /* Blue 500 */
-                            royal: '#1d4ed8',     /* Blue 700 - Azul Real para Portal */
-                            cobalt: '#1e3a8a',    /* Blue 900 - Azul Cobalto profundo */
-                            deepBlue: '#0f172a',  /* Slate 900 - Para menús oscuros */
-                            teal: '#14b8a6',      /* Teal 500 - Acentos verde/azul */
-                            emerald: '#10b981',   /* Emerald 500 - Éxito/Positivo */
-                            bgLight: '#f0f9ff',   /* Sky 50 - Fondo general */
+                            cyan: '#06b6d4',
+                            lightCyan: '#22d3ee',
+                            blue: '#3b82f6',
+                            royal: '#1d4ed8',
+                            cobalt: '#1e3a8a',
+                            deepBlue: '#0f172a',
+                            teal: '#14b8a6',
+                            emerald: '#10b981',
+                            bgLight: '#f0f9ff',
                             glass: 'rgba(255, 255, 255, 0.85)'
                         }
                     },
@@ -47,14 +48,18 @@
         }
     </script>
 
+    <!-- =====================================================================
+         BLOQUE 2: ESTILOS PERSONALIZADOS Y ANIMACIONES VISUALES
+         Controla la barra de desplazamiento, el efecto cristal (glassmorphism),
+         las notificaciones flotantes (toasts), la ampliación de Misión/Visión
+         y el giro 3D de las tarjetas de ventajas competitivas.
+         ===================================================================== -->
     <style>
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
 
-        /* Glassmorphism */
         .glass-panel {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(16px);
@@ -62,14 +67,12 @@
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
-        /* Animations */
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Toast Notifications */
         #toast-container {
             position: fixed;
             bottom: 20px;
@@ -93,15 +96,11 @@
             transform: translateX(100%);
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
-        .toast.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        .toast.show { opacity: 1; transform: translateX(0); }
         .toast-success { background: linear-gradient(135deg, #10b981, #059669); }
         .toast-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
         .toast-info { background: linear-gradient(135deg, #1d4ed8, #1e3a8a); }
 
-        /* Tarjetas Expandibles de Misión y Visión */
         .mv-card {
             cursor: pointer;
             transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, opacity 0.35s ease;
@@ -117,7 +116,6 @@
             transform: scale(0.96);
         }
 
-        /* Tarjetas 3D Flip (¿Por qué elegirnos?) */
         .flip-card {
             perspective: 1200px;
             height: 290px;
@@ -149,21 +147,42 @@
         }
     </style>
 </head>
+
 <body class="bg-brand-bgLight text-slate-800 font-sans flex flex-col min-h-screen selection:bg-brand-cyan selection:text-white">
 
-    <!-- Contenedor de Notificaciones -->
     <div id="toast-container"></div>
 
-    <!-- ================= NAVBAR ================= -->
+    <!-- =====================================================================
+         BLOQUE 3: BARRA DE NAVEGACIÓN PRINCIPAL Y LOGOTIPO AMPLIADO
+         Muestra el logotipo oficial en un tamaño amplio y legible junto con
+         los enlaces de navegación, el botón del Portal y el menú para móvil.
+         ===================================================================== -->
     <nav id="main-nav" class="glass-panel sticky top-0 z-50 shadow-sm border-b border-sky-100/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20">
-                <!-- Logo -->
-                <a href="index.html" onclick="showSection('home')" class="flex items-center cursor-pointer group">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTedmtaRlbbpkui1AvK4vln1yFu4zjA7LjmCmNmtTAQNA&s=10" alt="Construcciones y Pavimentaciones Arciniega S.A. de C.V." class="h-14 w-auto object-contain bg-white px-2.5 py-1 rounded-xl shadow-sm transition-transform duration-300 group-hover:scale-105">
+            <div class="flex justify-between items-center h-24 sm:h-28">
+                <a href="index.html" onclick="showSection('home')" class="flex items-center gap-3 sm:gap-4 cursor-pointer group py-1.5">
+                    <svg viewBox="0 0 120 110" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 shrink-0 drop-shadow-sm transition-transform duration-300 group-hover:scale-105" aria-label="Logo CP Arciniega">
+                        <defs>
+                            <clipPath id="cp-triangle-clip-nav">
+                                <path d="M54 11 Q60 2 66 11 L113 94 Q118 103 108 103 L12 103 Q2 103 7 94 Z" />
+                            </clipPath>
+                        </defs>
+                        <g clip-path="url(#cp-triangle-clip-nav)">
+                            <rect x="0" y="0" width="120" height="110" fill="#2952e3" />
+                            <text x="20" y="101" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="76">c</text>
+                            <text x="55" y="96" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="82">p</text>
+                        </g>
+                    </svg>
+                    <div class="flex flex-col leading-tight">
+                        <span class="font-extrabold text-xs sm:text-sm md:text-base tracking-wide text-brand-cobalt uppercase">
+                            Construcciones y Pavimentaciones
+                        </span>
+                        <span class="font-black text-base sm:text-xl md:text-2xl tracking-tight text-brand-royal uppercase">
+                            Arciniega <span class="text-xs sm:text-sm font-bold text-slate-600">S.A. de C.V.</span>
+                        </span>
+                    </div>
                 </a>
                 
-                <!-- Menú Desktop -->
                 <div class="hidden md:flex items-center space-x-2">
                     <button onclick="showSection('home')" class="px-4 py-2 text-brand-cyan bg-sky-50 font-semibold rounded-lg transition-colors">Inicio</button>
                     <a href="Productos.html" class="px-4 py-2 text-slate-600 font-semibold rounded-lg hover:bg-sky-50 hover:text-brand-cyan transition-colors">Productos</a>
@@ -176,7 +195,6 @@
                     </div>
                 </div>
 
-                <!-- Menú Móvil Botón -->
                 <div class="flex items-center md:hidden">
                     <button onclick="toggleMobileMenu()" class="text-slate-600 hover:text-brand-cyan p-2">
                         <i class="fa-solid fa-bars text-2xl"></i>
@@ -185,7 +203,6 @@
             </div>
         </div>
         
-        <!-- Menú Móvil Desplegable -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-sky-100 absolute w-full shadow-lg">
             <div class="px-4 py-4 space-y-2">
                 <button onclick="showSection('home'); toggleMobileMenu()" class="block w-full text-left px-4 py-3 rounded-lg text-brand-cyan bg-sky-50 font-bold">Inicio</button>
@@ -196,12 +213,15 @@
         </div>
     </nav>
 
-    <!-- ================= CONTENIDO PRINCIPAL ================= -->
     <main class="flex-grow flex flex-col relative w-full h-full">
 
-        <!-- SECCIÓN: INICIO -->
+        <!-- =================================================================
+             BLOQUE 4: SECCIÓN DE INICIO (HERO, MISIÓN, VISIÓN Y VENTAJAS 3D)
+             Contiene la portada principal con acceso al catálogo, las tarjetas
+             interactivas de Misión y Visión, y las 4 tarjetas giratorias 3D
+             con los beneficios de la empresa.
+             ================================================================= -->
         <section id="home" class="view-section flex-grow flex flex-col pb-20">
-            <!-- Hero -->
             <div class="relative overflow-hidden bg-brand-deepBlue text-white py-24 lg:py-32">
                 <div class="absolute inset-0 z-0 opacity-30">
                     <div class="absolute -top-24 -left-24 w-96 h-96 bg-brand-cyan rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
@@ -223,7 +243,6 @@
                 </div>
             </div>
 
-            <!-- Misión y Visión (Interactivas al presionar) -->
             <div class="max-w-7xl mx-auto px-4 py-16 w-full -mt-12 relative z-20">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
                     <div id="card-mision" onclick="toggleMissionVision(this)" class="mv-card glass-panel p-10 rounded-3xl shadow-soft border-t-4 border-t-brand-cyan relative">
@@ -261,14 +280,12 @@
                     </div>
                 </div>
 
-                <!-- Por qué elegirnos (Tarjetas con giro 3D) -->
                 <div class="text-center mb-12">
                     <h2 class="text-4xl font-extrabold text-slate-800">¿Por qué elegir Arciniega?</h2>
                     <p class="text-slate-500 mt-2 text-sm font-medium">Pasa el cursor o toca cada tarjeta para ver los detalles</p>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Tarjeta 1: Volumen Completo -->
                     <div class="flip-card" onclick="this.classList.toggle('flipped')">
                         <div class="flip-card-inner">
                             <div class="flip-card-front bg-white p-8 shadow-sm border border-slate-100 flex flex-col items-center justify-center text-center">
@@ -286,7 +303,6 @@
                         </div>
                     </div>
 
-                    <!-- Tarjeta 2: Precio y Calidad -->
                     <div class="flip-card" onclick="this.classList.toggle('flipped')">
                         <div class="flip-card-inner">
                             <div class="flip-card-front bg-white p-8 shadow-sm border border-slate-100 flex flex-col items-center justify-center text-center">
@@ -304,7 +320,6 @@
                         </div>
                     </div>
 
-                    <!-- Tarjeta 3: Asesoría Profesional -->
                     <div class="flip-card" onclick="this.classList.toggle('flipped')">
                         <div class="flip-card-inner">
                             <div class="flip-card-front bg-white p-8 shadow-sm border border-slate-100 flex flex-col items-center justify-center text-center">
@@ -322,7 +337,6 @@
                         </div>
                     </div>
 
-                    <!-- Tarjeta 4: Entrega Puntual -->
                     <div class="flip-card" onclick="this.classList.toggle('flipped')">
                         <div class="flip-card-inner">
                             <div class="flip-card-front bg-white p-8 shadow-sm border border-slate-100 flex flex-col items-center justify-center text-center">
@@ -343,10 +357,13 @@
             </div>
         </section>
 
-        <!-- SECCIÓN: LOGIN PORTAL (DIVIDIDO EN DOS Y EN AZUL REAL / COBALTO) -->
+        <!-- =================================================================
+             BLOQUE 5: PORTAL DE ACCESO (INICIO DE SESIÓN Y REGISTRO)
+             Permite iniciar sesión como Cliente o Administrador y desplegar
+             el formulario de alta para registrar clientes nuevos en MySQL.
+             ================================================================= -->
         <section id="login" class="view-section hidden fade-in flex-grow flex items-center justify-center p-4 py-12">
             
-            <!-- PASO 1: INICIAR SESIÓN -->
             <div id="portal-vista-login" class="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-blue-100 fade-in">
                 <div class="text-center mb-8">
                     <div class="w-16 h-16 mx-auto bg-gradient-to-br from-brand-royal to-brand-cobalt rounded-2xl flex items-center justify-center text-white text-2xl shadow-glow-royal mb-4">
@@ -388,7 +405,6 @@
                     </button>
                 </form>
 
-                <!-- Enlace inferior para crear cuenta -->
                 <div class="mt-7 pt-5 border-t border-blue-100 text-center">
                     <p class="text-sm text-slate-500">
                         ¿No tienes una cuenta?
@@ -399,7 +415,6 @@
                 </div>
             </div>
 
-            <!-- PASO 2: CREAR CUENTA (OCULTO HASTA PRESIONAR EL ENLACE) -->
             <div id="portal-vista-registro" class="hidden max-w-xl w-full bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-blue-100">
                 <div class="text-center mb-6">
                     <span class="inline-block py-1 px-3.5 rounded-full bg-blue-50 text-brand-royal border border-blue-200 text-xs font-bold uppercase mb-2">
@@ -472,7 +487,6 @@
                     </button>
                 </form>
 
-                <!-- Enlace inferior para regresar a iniciar sesión -->
                 <div class="mt-6 pt-5 border-t border-blue-100 text-center">
                     <p class="text-sm text-slate-500">
                         ¿Ya tienes una cuenta?
@@ -485,10 +499,14 @@
 
         </section>
 
-        <!-- ================= DASHBOARD ADMINISTRATIVO ================= -->
+        <!-- =================================================================
+             BLOQUE 6: PANEL ADMINISTRATIVO INTEGRADO (DASHBOARD MYSQL)
+             Muestra la barra lateral de navegación por módulos y las tablas
+             sincronizadas de artículos, proveedores, clientes, ventas,
+             vehículos y personal.
+             ================================================================= -->
         <section id="dashboard" class="view-section hidden bg-slate-100 w-full flex h-[100vh] overflow-hidden fixed top-0 left-0 z-[100]">
             
-            <!-- Sidebar -->
             <aside class="w-64 bg-brand-deepBlue text-slate-300 flex flex-col shadow-2xl relative z-20">
                 <div class="p-5 bg-slate-950 flex items-center gap-3 border-b border-slate-800">
                     <div class="w-10 h-10 rounded-full bg-brand-cyan flex items-center justify-center text-white font-bold">A</div>
@@ -519,9 +537,7 @@
                 </div>
             </aside>
 
-            <!-- Main Content del Dashboard -->
             <main class="flex-1 flex flex-col h-full bg-slate-50 relative z-10 overflow-hidden">
-                <!-- Header interno -->
                 <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center z-10">
                     <h2 id="dash-title" class="text-xl font-extrabold text-slate-800">Control de Inventario</h2>
                     <div class="relative w-64">
@@ -530,10 +546,8 @@
                     </div>
                 </header>
 
-                <!-- Contenedor scrolleable de las vistas -->
                 <div class="flex-1 overflow-y-auto p-6 custom-scroll">
                     
-                    <!-- VISTA 1: ARTÍCULOS -->
                     <div id="view-articulos" class="dash-view fade-in block">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 border-l-4 border-l-brand-cyan">
@@ -573,7 +587,6 @@
                         </div>
                     </div>
 
-                    <!-- VISTA 2: PROVEEDORES -->
                     <div id="view-proveedores" class="dash-view hidden">
                         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden h-full">
                             <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
@@ -594,7 +607,6 @@
                         </div>
                     </div>
 
-                    <!-- VISTA 3: CLIENTES -->
                     <div id="view-clientes" class="dash-view hidden">
                         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden h-full">
                             <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
@@ -615,7 +627,6 @@
                         </div>
                     </div>
 
-                    <!-- VISTA 4: VENTAS -->
                     <div id="view-ventas" class="dash-view hidden">
                         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden h-full">
                             <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
@@ -637,7 +648,6 @@
                         </div>
                     </div>
 
-                    <!-- VISTA 5: VEHÍCULOS -->
                     <div id="view-vehiculos" class="dash-view hidden">
                         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden h-full">
                             <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
@@ -658,7 +668,6 @@
                         </div>
                     </div>
 
-                    <!-- VISTA 6: PERSONAL -->
                     <div id="view-personal" class="dash-view hidden">
                         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden h-full">
                             <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
@@ -684,13 +693,36 @@
         </section>
     </main>
 
-    <!-- Footer General -->
+    <!-- =====================================================================
+         BLOQUE 7: PIE DE PÁGINA CON LOGOTIPO AMPLIADO Y DATOS DE CONTACTO
+         Presenta el logotipo oficial en gran formato, la razón social,
+         teléfonos directos, correo electrónico y ubicación de la planta.
+         ===================================================================== -->
     <footer id="main-footer" class="bg-brand-deepBlue text-slate-400 py-12 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
                 <div>
-                    <div class="mb-4">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTedmtaRlbbpkui1AvK4vln1yFu4zjA7LjmCmNmtTAQNA&s=10" alt="Construcciones y Pavimentaciones Arciniega S.A. de C.V." class="h-14 w-auto object-contain bg-white px-3 py-1.5 rounded-xl">
+                    <div class="flex items-center gap-3.5 mb-4">
+                        <svg viewBox="0 0 120 110" class="w-16 h-16 sm:w-20 sm:h-20 shrink-0 drop-shadow-md" aria-label="Logo CP Arciniega">
+                            <defs>
+                                <clipPath id="cp-triangle-clip-footer">
+                                    <path d="M54 11 Q60 2 66 11 L113 94 Q118 103 108 103 L12 103 Q2 103 7 94 Z" />
+                                </clipPath>
+                            </defs>
+                            <g clip-path="url(#cp-triangle-clip-footer)">
+                                <rect x="0" y="0" width="120" height="110" fill="#2952e3" />
+                                <text x="20" y="101" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="76">c</text>
+                                <text x="55" y="96" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="82">p</text>
+                            </g>
+                        </svg>
+                        <div class="flex flex-col leading-tight">
+                            <span class="font-bold text-xs sm:text-sm tracking-wider text-sky-300 uppercase">
+                                Construcciones y Pavimentaciones
+                            </span>
+                            <span class="font-extrabold text-lg sm:text-xl tracking-tight text-white uppercase">
+                                Arciniega <span class="text-xs font-semibold text-slate-300">S.A. de C.V.</span>
+                            </span>
+                        </div>
                     </div>
                     <p class="text-sm text-slate-400 leading-relaxed">
                         Construcciones y Pavimentaciones Arciniega S.A. de C.V. Fuerza y precisión en cada metro cúbico para tus proyectos de construcción.
@@ -723,10 +755,16 @@
         </div>
     </footer>
 
-    <!-- Lógica de Navegación y Conexión a MySQL -->
+    <!-- =====================================================================
+         BLOQUE 8: LÓGICA JAVASCRIPT (NAVEGACIÓN, SESIONES Y CONEXIÓN A MYSQL)
+         Gestiona las alertas visuales, la expansión de tarjetas, el cambio de
+         vistas, el inicio de sesión y registro con /api, y la actualización de
+         las tablas del panel administrativo.
+         ===================================================================== -->
     <script>
         const API_URL = '/api';
 
+        /* Sub-bloque: Notificaciones flotantes (Toasts) e interacción de tarjetas */
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -766,6 +804,7 @@
             }
         }
 
+        /* Sub-bloque: Control de vistas principales y menú móvil */
         function showSection(sectionId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
             const active = document.getElementById(sectionId);
@@ -826,6 +865,7 @@
             }
         }
 
+        /* Sub-bloque: Gestión de sesión, inicio de sesión y registro de clientes */
         function actualizarNavbarSesion() {
             const data = localStorage.getItem('arciniega_user');
             const user = data ? JSON.parse(data) : null;
@@ -932,6 +972,7 @@
             }
         }
 
+        /* Sub-bloque: Navegación interna y carga de tablas del Dashboard */
         function showDashboardView(viewName) {
             document.querySelectorAll('.dash-view').forEach(view => {
                 view.classList.add('hidden');
