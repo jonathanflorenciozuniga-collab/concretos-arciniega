@@ -68,6 +68,95 @@ app.get('/api/articulos', (req, res) => {
     });
 });
 
+app.get('/api/catalogos-select', (req, res) => {
+    db.query('SELECT * FROM categoria ORDER BY id_categoria ASC', (errCat, categorias) => {
+        if (errCat) return res.status(500).json({ error: errCat.message });
+        db.query('SELECT * FROM unidades_medida ORDER BY id_unidad_medida ASC', (errUni, unidades) => {
+            if (errUni) return res.status(500).json({ error: errUni.message });
+            db.query('SELECT id_proveedor, razon_social, razon_comercio FROM proveedor ORDER BY id_proveedor ASC', (errProv, proveedores) => {
+                if (errProv) return res.status(500).json({ error: errProv.message });
+                res.json({ categorias, unidades, proveedores });
+            });
+        });
+    });
+});
+
+app.post('/api/articulos', (req, res) => {
+    const { desc1, desc2, tipo, stock, precio_base, id_categoria, id_unidad_medida, id_proveedor } = req.body;
+    if (!desc1 || precio_base === undefined) {
+        return res.status(400).json({ error: 'El nombre y el precio son obligatorios' });
+    }
+
+    db.query('SHOW COLUMNS FROM articulos', (errCols, cols) => {
+        if (errCols) return res.status(500).json({ error: errCols.message });
+
+        const dataMap = {
+            desc1: desc1,
+            desc2: desc2 || '',
+            tipo: tipo || 'General',
+            stock: parseFloat(stock) || 0,
+            precio_base: parseFloat(precio_base) || 0,
+            id_categoria: id_categoria || null,
+            id_unidad_medida: id_unidad_medida || null,
+            id_proveedor: id_proveedor || null,
+            estatus: '1'
+        };
+
+        const fields = [];
+        const values = [];
+
+        cols.forEach(col => {
+            const name = col.Field;
+            if (col.Extra && col.Extra.includes('auto_increment')) return;
+
+            if (dataMap[name] !== undefined && dataMap[name] !== null && dataMap[name] !== '') {
+                fields.push(name);
+                values.push(dataMap[name]);
+            } else if (col.Null === 'NO' && col.Default === null) {
+                fields.push(name);
+                const t = col.Type.toLowerCase();
+                if (t.includes('int') || t.includes('decimal') || t.includes('float') || t.includes('double')) {
+                    values.push(0);
+                } else if (t.includes('date') || t.includes('time')) {
+                    values.push(new Date().toISOString().slice(0, 19).replace('T', ' '));
+                } else {
+                    values.push('1');
+                }
+            }
+        });
+
+        const placeholders = fields.map(() => '?').join(', ');
+        const sql = `INSERT INTO articulos (${fields.join(', ')}) VALUES (${placeholders})`;
+
+        db.query(sql, values, (errInsert, result) => {
+            if (errInsert) return res.status(500).json({ error: errInsert.message });
+            res.json({ mensaje: 'Producto agregado correctamente', id_articulos: result.insertId });
+        });
+    });
+});
+
+app.put('/api/articulos/:id', (req, res) => {
+    const { id } = req.params;
+    const { desc1, desc2, stock, precio_base } = req.body;
+    const sql = `
+        UPDATE articulos 
+        SET desc1 = ?, desc2 = ?, stock = ?, precio_base = ?
+        WHERE id_articulos = ?
+    `;
+    db.query(sql, [desc1, desc2 || '', parseFloat(stock) || 0, parseFloat(precio_base) || 0, id], (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ mensaje: 'Producto actualizado' });
+    });
+});
+
+app.delete('/api/articulos/:id', (req, res) => {
+    const { id } = req.params;
+    db.query("UPDATE articulos SET estatus = '0' WHERE id_articulos = ?", [id], (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ mensaje: 'Producto dado de baja' });
+    });
+});
+
 app.get('/api/resistencias', (req, res) => {
     db.query("SELECT * FROM resistencias WHERE estatus IN ('1', 'Activo', 'activo') ORDER BY id_resistencia ASC", (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -115,6 +204,19 @@ app.get('/api/personal', (req, res) => {
         FROM personal pe
         LEFT JOIN puestos pu ON pe.id_puestos = pu.id_puestos
         ORDER BY pe.id_personal ASC
+    `;
+    db.query(query, (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
+app.get('/api/pedidos', (req, res) => {
+    const query = `
+        SELECT p.*, CONCAT(c.nombre, ' ', c.ap_pat) AS cliente_nombre
+        FROM pedidos p
+        LEFT JOIN cliente c ON p.id_cliente = c.id_cliente
+        ORDER BY p.id_pedidos DESC
     `;
     db.query(query, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });

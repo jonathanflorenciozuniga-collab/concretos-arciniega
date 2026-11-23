@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrativo - Concretos Arciniega</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            cyan: '#06b6d4',
+                            lightCyan: '#22d3ee',
+                            blue: '#3b82f6',
+                            royal: '#1d4ed8',
+                            deepBlue: '#0f172a',
+                            teal: '#14b8a6',
+                            emerald: '#10b981'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            min-width: 260px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.35s ease;
+        }
+        .toast.show { opacity: 1; transform: translateX(0); }
+        .toast-success { background: linear-gradient(135deg, #10b981, #059669); }
+        .toast-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .toast-info { background: linear-gradient(135deg, #06b6d4, #0284c7); }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans flex h-screen overflow-hidden">
+
+    <div id="toast-container"></div>
+
+    <!-- ================= BARRA LATERAL ================= -->
+    <aside class="w-64 bg-brand-deepBlue text-slate-300 flex flex-col shadow-2xl shrink-0">
+        <div class="p-5 bg-slate-950 flex items-center gap-3 border-b border-slate-800">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-cyan to-brand-teal flex items-center justify-center text-white font-extrabold text-lg">
+                <i class="fa-solid fa-truck-concrete"></i>
+            </div>
+            <div>
+                <p id="admin-user-name" class="text-sm font-bold text-white">Personal Admin</p>
+                <p class="text-[11px] text-brand-cyan font-semibold">Base de Datos Conectada</p>
+            </div>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+            <p class="px-3 text-[10px] font-bold tracking-wider text-slate-500 uppercase mb-2">Catálogo e Inventario</p>
+            <button id="link-articulos" onclick="cambiarVista('articulos')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-brand-cyan text-white font-bold transition-all shadow-md">
+                <i class="fa-solid fa-boxes-stacked w-5"></i> Productos (`articulos`)
+            </button>
+            <button id="link-proveedores" onclick="cambiarVista('proveedores')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white font-semibold transition-all">
+                <i class="fa-solid fa-handshake w-5"></i> Proveedores
+            </button>
+            
+            <p class="px-3 text-[10px] font-bold tracking-wider text-slate-500 uppercase mt-6 mb-2">Operación Comercial</p>
+            <button id="link-pedidos" onclick="cambiarVista('pedidos')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white font-semibold transition-all">
+                <i class="fa-solid fa-clipboard-list w-5"></i> Pedidos Recibidos
+            </button>
+            <button id="link-ventas" onclick="cambiarVista('ventas')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white font-semibold transition-all">
+                <i class="fa-solid fa-file-invoice-dollar w-5"></i> Ventas
+            </button>
+            <button id="link-clientes" onclick="cambiarVista('clientes')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white font-semibold transition-all">
+                <i class="fa-solid fa-users w-5"></i> Clientes
+            </button>
+            
+            <p class="px-3 text-[10px] font-bold tracking-wider text-slate-500 uppercase mt-6 mb-2">Logística y Equipo</p>
+            <button id="link-vehiculos" onclick="cambiarVista('vehiculos')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white font-semibold transition-all">
+                <i class="fa-solid fa-truck w-5"></i> Vehículos
+            </button>
+            <button id="link-personal" onclick="cambiarVista('personal')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white font-semibold transition-all">
+                <i class="fa-solid fa-user-tie w-5"></i> Personal
+            </button>
+        </nav>
+        
+        <div class="p-4 bg-slate-950 border-t border-slate-800 space-y-2">
+            <a href="Productos.html" class="block w-full text-center py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 font-semibold text-xs transition-colors">
+                <i class="fa-solid fa-store mr-1"></i> Ver Catálogo Público
+            </a>
+            <button onclick="cerrarSesion()" class="w-full py-2 rounded-lg text-red-400 hover:bg-red-500/10 font-bold text-xs transition-colors">
+                <i class="fa-solid fa-power-off mr-1"></i> Cerrar Sesión
+            </button>
+        </div>
+    </aside>
+
+    <!-- ================= CONTENIDO PRINCIPAL ================= -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden bg-slate-50">
+        <!-- Header -->
+        <header class="bg-white shadow-sm px-6 py-4 flex flex-wrap justify-between items-center gap-4 border-b border-slate-200/70">
+            <div>
+                <h1 id="dash-title" class="text-xl font-extrabold text-slate-800">Gestión de Productos (`articulos`)</h1>
+                <p class="text-xs text-slate-500">Los cambios que realices aquí se guardan directamente en tu base de datos</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="cargarTodo()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-rotate"></i> Actualizar Tablas
+                </button>
+                <button onclick="abrirModalNuevo()" class="px-4 py-2.5 bg-gradient-to-r from-brand-cyan to-brand-teal text-white rounded-xl text-xs font-bold shadow-md hover:brightness-110 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Agregar Producto
+                </button>
+            </div>
+        </header>
+
+        <!-- Área scrolleable -->
+        <div class="flex-1 overflow-y-auto p-6">
+
+            <!-- ========== VISTA 1: PRODUCTOS (ARTICULOS) ========== -->
+            <div id="view-articulos" class="dash-view fade-in block space-y-6">
+                <!-- Tarjetas Resumen -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 border-l-4 border-l-brand-cyan">
+                        <p class="text-xs font-bold text-slate-400 uppercase">Productos Activos</p>
+                        <h3 id="kpi-total" class="text-3xl font-extrabold text-slate-800 mt-1">0</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 border-l-4 border-l-amber-500">
+                        <p class="text-xs font-bold text-slate-400 uppercase">Stock Bajo (≤ 20)</p>
+                        <h3 id="kpi-bajo" class="text-3xl font-extrabold text-amber-600 mt-1">0</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 border-l-4 border-l-brand-teal">
+                        <p class="text-xs font-bold text-slate-400 uppercase">Valor Total Inventario</p>
+                        <h3 id="kpi-valor" class="text-3xl font-extrabold text-slate-800 mt-1">$0.00</h3>
+                    </div>
+                </div>
+
+                <!-- Filtros y Buscador -->
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col sm:flex-row gap-3 justify-between items-center">
+                    <div class="relative w-full sm:w-80">
+                        <i class="fa-solid fa-search absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                        <input type="text" id="buscar-producto" oninput="filtrarTablaProductos()" placeholder="Buscar por nombre, detalle o ID..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan">
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <label class="text-xs font-bold text-slate-500">Categoría:</label>
+                        <select id="filtro-categoria" onchange="filtrarTablaProductos()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-brand-cyan">
+                            <option value="TODAS">Todas las categorías</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tabla Ordenada de Productos -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-slate-100 text-slate-600 text-xs uppercase font-bold">
+                                <tr>
+                                    <th class="px-5 py-3.5">ID</th>
+                                    <th class="px-5 py-3.5">Producto (`desc1` / `desc2`)</th>
+                                    <th class="px-5 py-3.5">Categoría</th>
+                                    <th class="px-5 py-3.5">Proveedor</th>
+                                    <th class="px-5 py-3.5 text-center">Existencia</th>
+                                    <th class="px-5 py-3.5 text-right">Precio Base</th>
+                                    <th class="px-5 py-3.5 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-articulos" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== VISTA 2: PROVEEDORES ========== -->
+            <div id="view-proveedores" class="dash-view hidden">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+                        <h3 class="font-bold text-slate-800">Tabla `proveedor`</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-slate-100 text-slate-600 text-xs uppercase font-bold">
+                                <tr>
+                                    <th class="px-5 py-3">ID</th>
+                                    <th class="px-5 py-3">Razón Social</th>
+                                    <th class="px-5 py-3">Nombre Comercial</th>
+                                    <th class="px-5 py-3">Contacto</th>
+                                    <th class="px-5 py-3">Teléfono</th>
+                                    <th class="px-5 py-3 text-center">Estatus</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-proveedores" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== VISTA 3: PEDIDOS ========== -->
+            <div id="view-pedidos" class="dash-view hidden">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+                        <h3 class="font-bold text-slate-800">Pedidos desde el Catálogo (`pedidos`)</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-slate-100 text-slate-600 text-xs uppercase font-bold">
+                                <tr>
+                                    <th class="px-5 py-3">Folio</th>
+                                    <th class="px-5 py-3">Fecha Pedido</th>
+                                    <th class="px-5 py-3">Cliente</th>
+                                    <th class="px-5 py-3">Entrega Solicitada</th>
+                                    <th class="px-5 py-3">Dirección</th>
+                                    <th class="px-5 py-3">Especificaciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-pedidos" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== VISTA 4: VENTAS ========== -->
+            <div id="view-ventas" class="dash-view hidden">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+                        <h3 class="font-bold text-slate-800">Historial de Ventas (`ventas`)</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-slate-100 text-slate-600 text-xs uppercase font-bold">
+                                <tr>
+                                    <th class="px-5 py-3">Folio</th>
+                                    <th class="px-5 py-3">Fecha</th>
+                                    <th class="px-5 py-3">Cliente</th>
+                                    <th class="px-5 py-3 text-right">Total</th>
+                                    <th class="px-5 py-3 text-center">Forma Pago</th>
+                                    <th class="px-5 py-3 text-center">Estatus</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-ventas" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== VISTA 5: CLIENTES ========== -->
+            <div id="view-clientes" class="dash-view hidden">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+                        <h3 class="font-bold text-slate-800">Directorio de Clientes (`cliente`)</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-slate-100 text-slate-600 text-xs uppercase font-bold">
+                                <tr>
+                                    <th class="px-5 py-3">ID</th>
+                                    <th class="px-5 py-3">Nombre Completo</th>
+                                    <th class="px-5 py-3">Teléfono</th>
+                                    <th class="px-5 py-3">Correo</th>
+                                    <th class="px-5 py-3">Municipio / Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-clientes" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== VISTA 6: VEHÍCULOS ========== -->
+            <div id="view-vehiculos" class="dash-view hidden">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+                        <h3 class="font-bold text-slate-800">Flotilla (`vehiculos`)</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-slate-100 text-slate-600 text-xs uppercase font-bold">
+                                <tr>
+                                    <th class="px-5 py-3">ID</th>
+                                    <th class="px-5 py-3">Marca / Modelo</th>
+                                    <th class="px-5 py-3">Placa</th>
+                                    <th class="px-5 py-3">Capacidad</th>
+                                    <th class="px-5 py-3 text-center">Estatus</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-vehiculos" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== VISTA 7: PERSONAL ========== -->
+            <div id="view-personal" class="dash-view hidden">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+                        <h3 class="font-bold text-slate-800">Equipo y Personal (`personal`)</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-slate-100 text-slate-600 text-xs uppercase font-bold">
+                                <tr>
+                                    <th class="px-5 py-3">ID</th>
+                                    <th class="px-5 py-3">Nombre Completo</th>
+                                    <th class="px-5 py-3">Puesto</th>
+                                    <th class="px-5 py-3">Teléfono</th>
+                                    <th class="px-5 py-3 text-center">Estatus</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-personal" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ================= MODAL: AGREGAR NUEVO PRODUCTO ================= -->
+    <div id="modal-nuevo" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-7 shadow-2xl border border-slate-100 fade-in">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-50 text-brand-cyan flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-extrabold text-slate-800">Nuevo Producto en Base de Datos</h3>
+                        <p class="text-xs text-slate-500">Se guardará en la tabla `articulos` y aparecerá en el catálogo</p>
+                    </div>
+                </div>
+                <button onclick="cerrarModalNuevo()" class="text-slate-400 hover:text-slate-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form onsubmit="event.preventDefault(); guardarNuevoProducto();" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Nombre del Producto (`desc1`) *</label>
+                    <input type="text" id="nuevo-desc1" placeholder="Ej. Concreto Premezclado f'c 250 kg/cm2" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Descripción o Especificación (`desc2`)</label>
+                    <input type="text" id="nuevo-desc2" placeholder="Ej. Revenimiento 14 cm, agregado 3/4, tiro directo" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Categoría</label>
+                        <select id="nuevo-categoria" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Unidad de Medida</label>
+                        <select id="nuevo-unidad" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan"></select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Proveedor</label>
+                        <select id="nuevo-proveedor" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Tipo (`tipo`)</label>
+                        <input type="text" id="nuevo-tipo" placeholder="Ej. Concreto / Material" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Stock Inicial *</label>
+                        <input type="number" step="0.01" min="0" id="nuevo-stock" placeholder="100" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Precio Base (MXN) *</label>
+                        <input type="number" step="0.01" min="0" id="nuevo-precio" placeholder="2450.00" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                    <button type="button" onclick="cerrarModalNuevo()" class="px-5 py-2.5 rounded-xl text-slate-600 font-bold text-sm hover:bg-slate-100">Cancelar</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-teal text-white font-bold text-sm shadow-md hover:brightness-110">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i> Guardar en Base de Datos
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: EDITAR PRODUCTO EXISTENTE ================= -->
+    <div id="modal-editar" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-7 shadow-2xl border border-slate-100 fade-in">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
+                <h3 class="text-lg font-extrabold text-slate-800">Editar Producto</h3>
+                <button onclick="cerrarModalEditar()" class="text-slate-400 hover:text-slate-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form onsubmit="event.preventDefault(); guardarEdicionProducto();" class="space-y-4">
+                <input type="hidden" id="edit-id">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Nombre (`desc1`)</label>
+                    <input type="text" id="edit-desc1" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Detalle (`desc2`)</label>
+                    <input type="text" id="edit-desc2" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Stock Disponible</label>
+                        <input type="number" step="0.01" min="0" id="edit-stock" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Precio Base (MXN)</label>
+                        <input type="number" step="0.01" min="0" id="edit-precio" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                    <button type="button" onclick="cerrarModalEditar()" class="px-5 py-2.5 rounded-xl text-slate-600 font-bold text-sm hover:bg-slate-100">Cancelar</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-brand-cyan text-white font-bold text-sm shadow-md hover:brightness-110">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api';
+        let listaArticulos = [];
+
+        // Verificar que entró como administrador/personal
+        (function verificarAcceso() {
+            const raw = localStorage.getItem('arciniega_user');
+            const user = raw ? JSON.parse(raw) : null;
+            if (!user || user.rol !== 'admin') {
+                window.location.href = 'index.html';
+                return;
+            }
+            document.getElementById('admin-user-name').innerText = user.nombre || 'Administrador';
+        })();
+
+        function cerrarSesion() {
+            localStorage.removeItem('arciniega_user');
+            window.location.href = 'index.html';
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            let icon = type === 'success' ? 'fa-circle-check' : (type === 'error' ? 'fa-triangle-exclamation' : 'fa-circle-info');
+            toast.innerHTML = `<i class="fa-solid ${icon} text-lg"></i><span class="text-sm">${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 350);
+            }, 3000);
+        }
+
+        function cambiarVista(vista) {
+            document.querySelectorAll('.dash-view').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block', 'fade-in');
+            });
+            const activa = document.getElementById('view-' + vista);
+            if (activa) {
+                activa.classList.remove('hidden');
+                activa.classList.add('block', 'fade-in');
+            }
+
+            document.querySelectorAll('.sidebar-link').forEach(btn => {
+                btn.className = 'sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white font-semibold transition-all';
+            });
+            const btnActivo = document.getElementById('link-' + vista);
+            if (btnActivo) {
+                btnActivo.className = 'sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-brand-cyan text-white font-bold transition-all shadow-md';
+            }
+
+            const titulos = {
+                articulos: 'Gestión de Productos (`articulos`)',
+                proveedores: 'Directorio de Proveedores (`proveedor`)',
+                pedidos: 'Pedidos de Clientes (`pedidos`)',
+                ventas: 'Historial de Ventas (`ventas`)',
+                clientes: 'Directorio de Clientes (`cliente`)',
+                vehiculos: 'Control de Flotilla (`vehiculos`)',
+                personal: 'Gestión de Personal (`personal`)'
+            };
+            document.getElementById('dash-title').innerText = titulos[vista] || 'Panel Administrativo';
+        }
+
+        async function cargarSelectsFormulario() {
+            try {
+                const res = await fetch(`${API_URL}/catalogos-select`);
+                const data = await res.json();
+
+                const selCat = document.getElementById('nuevo-categoria');
+                selCat.innerHTML = (data.categorias || []).map(c =>
+                    `<option value="${c.id_categoria}">${c.descripcion}</option>`
+                ).join('');
+
+                const selUni = document.getElementById('nuevo-unidad');
+                selUni.innerHTML = (data.unidades || []).map(u =>
+                    `<option value="${u.id_unidad_medida}">${u.descripcion || u.abreviatura} (${u.abreviatura})</option>`
+                ).join('');
+
+                const selProv = document.getElementById('nuevo-proveedor');
+                selProv.innerHTML = (data.proveedores || []).map(p =>
+                    `<option value="${p.id_proveedor}">${p.razon_comercio || p.razon_social}</option>`
+                ).join('');
+            } catch (e) {
+                console.error('Error cargando selects:', e);
+            }
+        }
+
+        async function cargarTodo() {
+            try {
+                const [resArt, resProv, resPed, resVen, resCli, resVeh, resPer] = await Promise.all([
+                    fetch(`${API_URL}/articulos`),
+                    fetch(`${API_URL}/proveedores`),
+                    fetch(`${API_URL}/pedidos`),
+                    fetch(`${API_URL}/ventas`),
+                    fetch(`${API_URL}/clientes`),
+                    fetch(`${API_URL}/vehiculos`),
+                    fetch(`${API_URL}/personal`)
+                ]);
+
+                listaArticulos = await resArt.json();
+                const proveedores = await resProv.json();
+                const pedidos = await resPed.json();
+                const ventas = await resVen.json();
+                const clientes = await resCli.json();
+                const vehiculos = await resVeh.json();
+                const personal = await resPer.json();
+
+                // KPIs de productos
+                document.getElementById('kpi-total').innerText = listaArticulos.length;
+                document.getElementById('kpi-bajo').innerText = listaArticulos.filter(a => parseFloat(a.stock) <= 20).length;
+                const valor = listaArticulos.reduce((sum, a) => sum + (parseFloat(a.stock) * parseFloat(a.precio_base)), 0);
+                document.getElementById('kpi-valor').innerText = `$${valor.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+
+                // Llenar filtro de categorías
+                const categoriasUnicas = [...new Set(listaArticulos.map(a => a.categoria))];
+                const filtroCat = document.getElementById('filtro-categoria');
+                const valorActual = filtroCat.value;
+                filtroCat.innerHTML = '<option value="TODAS">Todas las categorías</option>' +
+                    categoriasUnicas.map(c => `<option value="${c}">${c}</option>`).join('');
+                if (categoriasUnicas.includes(valorActual)) filtroCat.value = valorActual;
+
+                filtrarTablaProductos();
+
+                // Tabla Proveedores
+                document.getElementById('tbody-proveedores').innerHTML = proveedores.map(p => `
+                    <tr class="hover:bg-sky-50/50">
+                        <td class="px-5 py-3 text-slate-400">#${p.id_proveedor}</td>
+                        <td class="px-5 py-3 font-bold text-slate-800">${p.razon_social}</td>
+                        <td class="px-5 py-3">${p.razon_comercio || '-'}</td>
+                        <td class="px-5 py-3">${p.nombre || '-'}</td>
+                        <td class="px-5 py-3">${p.telefono || '-'}</td>
+                        <td class="px-5 py-3 text-center"><span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-md">Activo</span></td>
+                    </tr>
+                `).join('');
+
+                // Tabla Pedidos
+                document.getElementById('tbody-pedidos').innerHTML = pedidos.length ? pedidos.map(pe => `
+                    <tr class="hover:bg-sky-50/50">
+                        <td class="px-5 py-3 font-bold text-brand-cyan">${pe.folio}</td>
+                        <td class="px-5 py-3">${String(pe.fecha_pedido).slice(0, 10)}</td>
+                        <td class="px-5 py-3 font-bold">${pe.cliente_nombre || 'Cliente #' + pe.id_cliente}</td>
+                        <td class="px-5 py-3">${String(pe.f_e_s).slice(0, 10)}</td>
+                        <td class="px-5 py-3">${pe.direccion_entrega || '-'}</td>
+                        <td class="px-5 py-3 text-slate-500">${pe.especificaciones || '-'}</td>
+                    </tr>
+                `).join('') : '<tr><td colspan="6" class="px-5 py-6 text-center text-slate-400">Aún no hay pedidos registrados</td></tr>';
+
+                // Tabla Ventas
+                document.getElementById('tbody-ventas').innerHTML = ventas.map(v => `
+                    <tr class="hover:bg-green-50/50">
+                        <td class="px-5 py-3 font-bold text-slate-800">${v.folio}</td>
+                        <td class="px-5 py-3">${String(v.fecha_venta).slice(0, 10)}</td>
+                        <td class="px-5 py-3">${v.cliente_nombre || '#' + v.id_cliente}</td>
+                        <td class="px-5 py-3 text-right font-bold text-green-700">$${parseFloat(v.total).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</td>
+                        <td class="px-5 py-3 text-center">${v.forma_pago}</td>
+                        <td class="px-5 py-3 text-center"><span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-md">Pagado</span></td>
+                    </tr>
+                `).join('');
+
+                // Tabla Clientes
+                document.getElementById('tbody-clientes').innerHTML = clientes.map(c => `
+                    <tr class="hover:bg-teal-50/50">
+                        <td class="px-5 py-3 text-slate-400">#${c.id_cliente}</td>
+                        <td class="px-5 py-3 font-bold text-slate-800">${c.nombre} ${c.ap_pat} ${c.ap_mat || ''}</td>
+                        <td class="px-5 py-3">${c.tel1}</td>
+                        <td class="px-5 py-3">${c.email1 || '-'}</td>
+                        <td class="px-5 py-3">${c.municipio || ''}, ${c.estado || ''}</td>
+                    </tr>
+                `).join('');
+
+                // Tabla Vehículos
+                document.getElementById('tbody-vehiculos').innerHTML = vehiculos.map(vh => `
+                    <tr class="hover:bg-blue-50/50">
+                        <td class="px-5 py-3 text-slate-400">#${vh.id_vehiculos}</td>
+                        <td class="px-5 py-3 font-bold text-slate-800">${vh.marca} ${vh.modelo} (${vh.anio})</td>
+                        <td class="px-5 py-3"><span class="px-2 py-1 bg-slate-200 text-xs font-mono rounded">${vh.placa}</span></td>
+                        <td class="px-5 py-3 text-brand-blue font-bold">${vh.capacidad} m3</td>
+                        <td class="px-5 py-3 text-center"><span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-md">Operativo</span></td>
+                    </tr>
+                `).join('');
+
+                // Tabla Personal
+                document.getElementById('tbody-personal').innerHTML = personal.map(pe => `
+                    <tr class="hover:bg-indigo-50/50">
+                        <td class="px-5 py-3 text-slate-400">#${pe.id_personal}</td>
+                        <td class="px-5 py-3 font-bold text-slate-800">${pe.nombre} ${pe.ap_pat}</td>
+                        <td class="px-5 py-3">${pe.puesto_nombre || 'Puesto #' + pe.id_puestos}</td>
+                        <td class="px-5 py-3">${pe.tel || '-'}</td>
+                        <td class="px-5 py-3 text-center"><span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-md">Activo</span></td>
+                    </tr>
+                `).join('');
+
+            } catch (error) {
+                showToast('Error al cargar datos del servidor', 'error');
+            }
+        }
+
+        function filtrarTablaProductos() {
+            const texto = document.getElementById('buscar-producto').value.toLowerCase();
+            const cat = document.getElementById('filtro-categoria').value;
+
+            const filtrados = listaArticulos.filter(a => {
+                const coincideTexto = a.desc1.toLowerCase().includes(texto) ||
+                                      (a.desc2 || '').toLowerCase().includes(texto) ||
+                                      String(a.id_articulos).includes(texto);
+                const coincideCat = cat === 'TODAS' || a.categoria === cat;
+                return coincideTexto && coincideCat;
+            });
+
+            document.getElementById('tbody-articulos').innerHTML = filtrados.length ? filtrados.map(a => {
+                const stockNum = parseFloat(a.stock);
+                const badgeStock = stockNum <= 0
+                    ? 'bg-red-100 text-red-700'
+                    : (stockNum <= 20 ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700');
+
+                return `
+                    <tr class="hover:bg-sky-50/60 transition-colors">
+                        <td class="px-5 py-3.5 text-slate-400 font-bold">#${a.id_articulos}</td>
+                        <td class="px-5 py-3.5">
+                            <p class="font-bold text-slate-800">${a.desc1}</p>
+                            <p class="text-xs text-slate-400">${a.desc2 || 'Sin detalle adicional'}</p>
+                        </td>
+                        <td class="px-5 py-3.5"><span class="px-2.5 py-1 bg-sky-50 text-brand-cyan text-xs font-bold rounded-lg">${a.categoria}</span></td>
+                        <td class="px-5 py-3.5 text-slate-500 text-xs">${a.proveedor}</td>
+                        <td class="px-5 py-3.5 text-center">
+                            <span class="px-2.5 py-1 ${badgeStock} text-xs font-extrabold rounded-lg">${a.stock} ${a.unidad}</span>
+                        </td>
+                        <td class="px-5 py-3.5 text-right font-extrabold text-slate-800">$${parseFloat(a.precio_base).toLocaleString('es-MX', { minimumFractionDigits: 2 })}</td>
+                        <td class="px-5 py-3.5 text-center space-x-1">
+                            <button onclick="abrirModalEditar(${a.id_articulos})" title="Editar precio o stock" class="px-2.5 py-1.5 bg-blue-50 text-brand-royal hover:bg-brand-royal hover:text-white rounded-lg text-xs font-bold transition-colors">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button onclick="eliminarProducto(${a.id_articulos}, '${a.desc1.replace(/'/g, "\\'")}')" title="Dar de baja" class="px-2.5 py-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg text-xs font-bold transition-colors">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('') : '<tr><td colspan="7" class="px-5 py-8 text-center text-slate-400">No se encontraron productos con ese filtro</td></tr>';
+        }
+
+        // Funciones Modal Nuevo Producto
+        function abrirModalNuevo() {
+            document.getElementById('modal-nuevo').classList.remove('hidden');
+        }
+        function cerrarModalNuevo() {
+            document.getElementById('modal-nuevo').classList.add('hidden');
+        }
+
+        async function guardarNuevoProducto() {
+            const payload = {
+                desc1: document.getElementById('nuevo-desc1').value.trim(),
+                desc2: document.getElementById('nuevo-desc2').value.trim(),
+                id_categoria: document.getElementById('nuevo-categoria').value,
+                id_unidad_medida: document.getElementById('nuevo-unidad').value,
+                id_proveedor: document.getElementById('nuevo-proveedor').value,
+                tipo: document.getElementById('nuevo-tipo').value.trim(),
+                stock: document.getElementById('nuevo-stock').value,
+                precio_base: document.getElementById('nuevo-precio').value
+            };
+
+            try {
+                const res = await fetch(`${API_URL}/articulos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    showToast(data.error || 'No se pudo guardar el producto', 'error');
+                    return;
+                }
+
+                showToast('Producto agregado a la base de datos', 'success');
+                cerrarModalNuevo();
+                document.getElementById('nuevo-desc1').value = '';
+                document.getElementById('nuevo-desc2').value = '';
+                document.getElementById('nuevo-stock').value = '';
+                document.getElementById('nuevo-precio').value = '';
+                cargarTodo();
+            } catch (error) {
+                showToast('Error de conexión con el servidor', 'error');
+            }
+        }
+
+        // Funciones Modal Editar Producto
+        function abrirModalEditar(id) {
+            const prod = listaArticulos.find(a => a.id_articulos === id);
+            if (!prod) return;
+            document.getElementById('edit-id').value = prod.id_articulos;
+            document.getElementById('edit-desc1').value = prod.desc1;
+            document.getElementById('edit-desc2').value = prod.desc2 || '';
+            document.getElementById('edit-stock').value = prod.stock;
+            document.getElementById('edit-precio').value = prod.precio_base;
+            document.getElementById('modal-editar').classList.remove('hidden');
+        }
+        function cerrarModalEditar() {
+            document.getElementById('modal-editar').classList.add('hidden');
+        }
+
+        async function guardarEdicionProducto() {
+            const id = document.getElementById('edit-id').value;
+            const payload = {
+                desc1: document.getElementById('edit-desc1').value.trim(),
+                desc2: document.getElementById('edit-desc2').value.trim(),
+                stock: document.getElementById('edit-stock').value,
+                precio_base: document.getElementById('edit-precio').value
+            };
+
+            try {
+                const res = await fetch(`${API_URL}/articulos/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) {
+                    showToast('No se pudo actualizar', 'error');
+                    return;
+                }
+                showToast('Cambios guardados en la base de datos', 'success');
+                cerrarModalEditar();
+                cargarTodo();
+            } catch (error) {
+                showToast('Error de conexión', 'error');
+            }
+        }
+
+        async function eliminarProducto(id, nombre) {
+            if (!confirm(`¿Seguro que deseas dar de baja "${nombre}"?`)) return;
+            try {
+                const res = await fetch(`${API_URL}/articulos/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    showToast('Producto dado de baja', 'info');
+                    cargarTodo();
+                }
+            } catch (error) {
+                showToast('Error al dar de baja', 'error');
+            }
+        }
+
+        // Iniciar
+        cargarSelectsFormulario();
+        cargarTodo();
+    </script>
+</body>
+</html>
