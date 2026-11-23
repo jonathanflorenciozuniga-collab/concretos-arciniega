@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
+
+<!-- =========================================================================
+     BLOQUE 1: CONFIGURACIÓN DEL DOCUMENTO, LIBRERÍAS Y PALETA DE COLORES
+     Define la codificación, vista adaptable, el título oficial de la empresa,
+     la carga de Tailwind CSS, iconos FontAwesome, tipografía Inter y la
+     configuración personalizada de colores y sombras corporativas.
+     ========================================================================= -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Concretos Arciniega - Catálogo de Productos</title>
+    <title>Catálogo de Productos - Construcciones y Pavimentaciones Arciniega S.A. de C.V.</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -18,6 +27,8 @@
                             cyan: '#06b6d4',
                             lightCyan: '#22d3ee',
                             blue: '#3b82f6',
+                            royal: '#1d4ed8',
+                            cobalt: '#1e3a8a',
                             deepBlue: '#0f172a',
                             teal: '#14b8a6',
                             emerald: '#10b981',
@@ -26,33 +37,102 @@
                     },
                     boxShadow: {
                         'glow-cyan': '0 0 20px rgba(6, 182, 212, 0.4)',
-                        'soft': '0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.01)'
+                        'glow-royal': '0 10px 25px -5px rgba(29, 78, 216, 0.35)',
+                        'soft': '0 12px 30px -6px rgba(15, 23, 42, 0.07), 0 4px 12px -4px rgba(15, 23, 42, 0.03)'
                     }
                 }
             }
         }
     </script>
+
+    <!-- =====================================================================
+         BLOQUE 2: ESTILOS PERSONALIZADOS Y ANIMACIONES VISUALES
+         Controla la barra de desplazamiento, el efecto cristal (glassmorphism),
+         las animaciones de entrada suave y las notificaciones flotantes.
+         ===================================================================== -->
     <style>
-        .glass-panel { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(12px); }
-        #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 60; display: flex; flex-direction: column; gap: 0.75rem; }
-        .toast { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; border-radius: 1rem; background: #0f172a; color: #fff; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+        }
+
+        .fade-in { animation: fadeIn 0.45s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #toast-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .toast {
+            min-width: 260px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            border-radius: 1rem;
+            background: #0f172a;
+            color: #fff;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.28);
+            animation: slideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
         .toast-success { border-left: 4px solid #10b981; }
         .toast-error { border-left: 4px solid #ef4444; }
         .toast-info { border-left: 4px solid #06b6d4; }
     </style>
 </head>
+
 <body class="bg-brand-bgLight text-slate-800 font-sans flex flex-col min-h-screen selection:bg-brand-cyan selection:text-white">
 
     <div id="toast-container"></div>
 
-    <nav class="glass-panel sticky top-0 z-50 shadow-sm border-b border-sky-100/50">
+    <!-- =====================================================================
+         BLOQUE 3: BARRA DE NAVEGACIÓN PRINCIPAL Y LOGOTIPO OFICIAL
+         Muestra el isotipo triangular azul cp junto con la razón social
+         ampliada, los enlaces de navegación, el estado de sesión y menú móvil.
+         ===================================================================== -->
+    <nav class="glass-panel sticky top-0 z-50 shadow-sm border-b border-sky-100/60">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20">
-                <a href="index.html" class="flex items-center cursor-pointer group">
-                    <div class="bg-gradient-to-br from-brand-cyan to-brand-teal p-2.5 rounded-xl shadow-lg group-hover:shadow-glow-cyan transition-all duration-300">
-                        <i class="fa-solid fa-truck-concrete text-white text-2xl"></i>
+            <div class="flex justify-between items-center h-24 sm:h-28">
+                <a href="index.html" class="flex items-center gap-3 sm:gap-4 cursor-pointer group py-1.5">
+                    <svg viewBox="0 0 120 110" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 shrink-0 drop-shadow-sm transition-transform duration-300 group-hover:scale-105" aria-label="Logo CP Arciniega">
+                        <defs>
+                            <clipPath id="cp-triangle-clip-nav-productos">
+                                <path d="M54 11 Q60 2 66 11 L113 94 Q118 103 108 103 L12 103 Q2 103 7 94 Z" />
+                            </clipPath>
+                        </defs>
+                        <g clip-path="url(#cp-triangle-clip-nav-productos)">
+                            <rect x="0" y="0" width="120" height="110" fill="#2952e3" />
+                            <text x="20" y="101" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="76">c</text>
+                            <text x="55" y="96" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="82">p</text>
+                        </g>
+                    </svg>
+                    <div class="flex flex-col leading-tight">
+                        <span class="font-extrabold text-xs sm:text-sm md:text-base tracking-wide text-brand-cobalt uppercase">
+                            Construcciones y Pavimentaciones
+                        </span>
+                        <span class="font-black text-base sm:text-xl md:text-2xl tracking-tight text-brand-royal uppercase">
+                            Arciniega <span class="text-xs sm:text-sm font-bold text-slate-600">S.A. de C.V.</span>
+                        </span>
                     </div>
-                    <span class="font-extrabold text-2xl ml-3 bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-brand-cyan tracking-tight">Arciniega</span>
                 </a>
                 
                 <div class="hidden md:flex items-center space-x-2">
@@ -76,52 +156,72 @@
                 <a href="index.html" class="block w-full text-left px-4 py-3 rounded-lg text-slate-700 font-bold hover:bg-sky-50">Inicio</a>
                 <a href="Productos.html" class="block w-full text-left px-4 py-3 rounded-lg bg-sky-50 text-brand-cyan font-bold">Productos</a>
                 <a href="contacto.html" class="block w-full text-left px-4 py-3 rounded-lg text-slate-700 font-bold hover:bg-sky-50">Contacto</a>
-                <a href="inicio_secion.html" class="block w-full text-center px-4 py-3 mt-4 rounded-xl bg-brand-cyan text-white font-bold shadow-md">Iniciar Sesión</a>
+                <a href="inicio_secion.html" class="block w-full text-center px-4 py-3 mt-4 rounded-xl bg-gradient-to-r from-brand-royal to-brand-cobalt text-white font-bold shadow-md">Iniciar Sesión</a>
             </div>
         </div>
     </nav>
 
-    <header class="relative overflow-hidden bg-brand-deepBlue text-white py-14">
-        <div class="absolute inset-0 z-0 opacity-30">
-            <div class="absolute -top-20 -left-20 w-80 h-80 bg-brand-cyan rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
-            <div class="absolute bottom-0 -right-20 w-80 h-80 bg-brand-teal rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
+    <!-- =====================================================================
+         BLOQUE 4: ENCABEZADO HERO DEL CATÁLOGO DE PRODUCTOS
+         Portada superior con iluminación ambiental en tonos cian, azul real y
+         verde azulado presentando el catálogo de concretos y derivados.
+         ===================================================================== -->
+    <header class="relative overflow-hidden bg-brand-deepBlue text-white pt-16 pb-24">
+        <div class="absolute inset-0 z-0 opacity-35">
+            <div class="absolute -top-24 -left-24 w-96 h-96 bg-brand-cyan rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
+            <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 bg-brand-royal rounded-full mix-blend-screen filter blur-3xl opacity-40"></div>
+            <div class="absolute -bottom-16 -right-24 w-96 h-96 bg-brand-teal rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
         </div>
-        <div class="relative z-10 max-w-7xl mx-auto px-4 text-center">
-            <span class="inline-block py-1 px-4 rounded-full bg-cyan-900/50 border border-brand-cyan/40 text-brand-lightCyan text-xs font-bold tracking-widest mb-4 uppercase">
-                Materiales y Concretos Certificados
+        <div class="relative z-10 max-w-7xl mx-auto px-4 text-center fade-in">
+            <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-cyan-900/50 border border-brand-cyan/40 text-brand-lightCyan text-xs font-bold tracking-widest mb-5 uppercase">
+                <i class="fa-solid fa-certificate"></i> Materiales y Concretos Certificados
             </span>
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight">Catálogo de Concretos y Derivados</h1>
-            <p class="text-slate-300 max-w-2xl mx-auto text-base">
-                Consulta precios, presentaciones y disponibilidad de todos nuestros productos para tu obra.
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight">
+                Catálogo de Concretos <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-lightCyan to-brand-teal">y Derivados</span>
+            </h1>
+            <p class="text-slate-300 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+                Consulta precios actualizados, presentaciones, existencias en tiempo real y especificaciones técnicas para tu obra.
             </p>
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl mx-auto px-4 py-10 w-full">
+    <!-- =====================================================================
+         BLOQUE 5: BARRA DE FILTROS, CUADRÍCULA DE PRODUCTOS Y RESISTENCIAS
+         Incluye el buscador flotante, filtros dinámicos por categoría, las
+         tarjetas de artículos sincronizadas con MySQL y la tabla visual de
+         resistencias de concreto disponibles.
+         ===================================================================== -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 pb-16 w-full">
 
-        <div class="glass-panel p-5 rounded-2xl shadow-soft mb-10 flex flex-col lg:flex-row gap-4 justify-between items-center border border-sky-100">
+        <!-- Barra de filtros y búsqueda elevada -->
+        <div class="glass-panel p-5 sm:p-6 rounded-3xl shadow-soft -mt-12 mb-10 flex flex-col lg:flex-row gap-4 justify-between items-center border border-sky-100 relative z-20 fade-in">
             <div id="category-filters" class="flex flex-wrap gap-2 justify-center lg:justify-start"></div>
 
-            <div class="relative w-full lg:w-72">
-                <i class="fa-solid fa-search absolute left-3.5 top-3 text-slate-400"></i>
-                <input type="search" id="buscador-productos" autocomplete="off" oninput="aplicarFiltros()" placeholder="Buscar producto o marca..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan">
+            <div class="relative w-full lg:w-80">
+                <i class="fa-solid fa-search absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+                <input type="search" id="buscador-productos" autocomplete="off" oninput="aplicarFiltros()" placeholder="Buscar producto, resistencia o marca..." class="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan transition-all shadow-inner">
             </div>
         </div>
 
-        <div id="productos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            <div class="col-span-full text-center py-12 text-slate-500 font-semibold">
-                <i class="fa-solid fa-spinner fa-spin text-brand-cyan text-2xl mb-2 block"></i>
+        <!-- Cuadrícula de productos -->
+        <div id="productos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mb-16 fade-in">
+            <div class="col-span-full bg-white rounded-3xl p-14 text-center shadow-soft border border-sky-100 text-slate-500 font-semibold">
+                <i class="fa-solid fa-spinner fa-spin text-brand-cyan text-3xl mb-3 block"></i>
                 Cargando catálogo desde la base de datos...
             </div>
         </div>
 
-        <section class="bg-white rounded-3xl p-8 shadow-soft border border-sky-100">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <!-- Sección de resistencias de concreto -->
+        <section class="bg-white rounded-3xl p-8 sm:p-10 shadow-soft border border-sky-100 relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-cyan via-brand-royal to-brand-teal"></div>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                 <div>
-                    <span class="text-brand-teal font-bold tracking-widest uppercase text-xs">Especificaciones Técnicas</span>
-                    <h2 class="text-2xl font-extrabold text-slate-800 mt-1">Resistencias de Concreto Disponibles</h2>
+                    <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-teal-50 text-brand-teal font-bold tracking-wider uppercase text-xs mb-2">
+                        <i class="fa-solid fa-flask-vial"></i> Especificaciones Técnicas
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800">Resistencias de Concreto Disponibles</h2>
                 </div>
-                <a href="contacto.html" class="bg-brand-deepBlue text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-brand-cyan transition-colors flex items-center gap-2">
+                <a href="contacto.html" class="bg-gradient-to-r from-brand-royal to-brand-cobalt text-white px-6 py-3 rounded-2xl font-bold text-sm hover:shadow-glow-royal hover:brightness-110 transition-all flex items-center gap-2 shrink-0">
                     <i class="fa-solid fa-headset"></i> Ayuda de un Asesor
                 </a>
             </div>
@@ -130,21 +230,26 @@
 
     </main>
 
-    <!-- Modal: Opciones al intentar Comprar sin Sesión Iniciada -->
+    <!-- =====================================================================
+         BLOQUE 6: MODALES INTERACTIVOS (INICIO DE SESIÓN Y PEDIDO EN LÍNEA)
+         Contiene la ventana emergente cuando el visitante no ha iniciado sesión
+         y el formulario de confirmación de pedido conectado a /api/pedidos.
+         ===================================================================== -->
     <div id="modal-login-requerido" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 text-center">
-            <div class="w-16 h-16 mx-auto bg-cyan-50 text-brand-cyan rounded-full flex items-center justify-center text-3xl mb-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border border-sky-100 text-center relative overflow-hidden fade-in">
+            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-cyan via-brand-royal to-brand-teal"></div>
+            <div class="w-16 h-16 mx-auto bg-gradient-to-br from-cyan-50 to-sky-100 text-brand-cyan rounded-2xl flex items-center justify-center text-3xl mb-4 shadow-sm">
                 <i class="fa-solid fa-cart-shopping"></i>
             </div>
             <h3 class="text-2xl font-extrabold text-slate-800 mb-2">Continúa con tu Compra</h3>
-            <p class="text-slate-600 text-sm mb-6">
-                Para realizar tu compra en línea inicia sesión con tu cuenta, o solicita apoyo directo de uno de nuestros asesores.
+            <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                Para realizar tu compra en línea inicia sesión con tu cuenta de cliente, o solicita apoyo directo de uno de nuestros asesores.
             </p>
             <div class="space-y-3">
-                <a href="inicio_secion.html" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-teal text-white font-bold text-sm shadow-md hover:shadow-glow-cyan transition-all flex items-center justify-center gap-2">
+                <a href="inicio_secion.html" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-royal to-brand-cobalt text-white font-bold text-sm shadow-md hover:shadow-glow-royal transition-all flex items-center justify-center gap-2">
                     <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión para Comprar
                 </a>
-                <a href="contacto.html" class="w-full py-3 rounded-xl bg-sky-50 text-brand-blue font-bold text-sm hover:bg-sky-100 transition-colors flex items-center justify-center gap-2">
+                <a href="contacto.html" class="w-full py-3 rounded-xl bg-sky-50 text-brand-royal font-bold text-sm hover:bg-sky-100 transition-colors flex items-center justify-center gap-2">
                     <i class="fa-solid fa-headset"></i> Pedir Ayuda a un Asesor
                 </a>
                 <button onclick="document.getElementById('modal-login-requerido').classList.add('hidden')" class="w-full py-2.5 rounded-xl text-slate-400 font-semibold text-xs hover:text-slate-600 transition-colors">
@@ -154,12 +259,12 @@
         </div>
     </div>
 
-    <!-- Modal: Formulario de Pedido -->
     <div id="modal-pedido" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-slate-100">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-sky-100 relative overflow-hidden fade-in">
+            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-cyan via-brand-royal to-brand-teal"></div>
             <div class="flex justify-between items-center mb-4">
                 <span class="px-3 py-1 rounded-full bg-teal-50 text-brand-teal text-xs font-bold uppercase">Confirmar Compra</span>
-                <button onclick="cerrarModalPedido()" class="text-slate-400 hover:text-slate-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="cerrarModalPedido()" class="text-slate-400 hover:text-slate-600 text-xl p-1"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <h3 id="pedido-producto-nombre" class="font-extrabold text-slate-800 text-xl mb-1"></h3>
             <p id="pedido-producto-precio" class="text-sm text-brand-cyan font-bold mb-5"></p>
@@ -168,42 +273,65 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Cantidad *</label>
-                        <input type="number" id="pedido-cantidad" min="1" step="0.5" value="1" oninput="actualizarTotalPedido()" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                        <input type="number" id="pedido-cantidad" min="1" step="0.5" value="1" oninput="actualizarTotalPedido()" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-brand-cyan transition-all" required>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Fecha de Entrega *</label>
-                        <input type="date" id="pedido-fecha" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                        <input type="date" id="pedido-fecha" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-brand-cyan transition-all" required>
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Dirección de Entrega en Obra *</label>
-                    <input type="text" id="pedido-direccion" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                    <input type="text" id="pedido-direccion" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-brand-cyan transition-all" required>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Indicaciones de Descarga (Opcional)</label>
-                    <input type="text" id="pedido-especificaciones" placeholder="Ej. Tiro directo, horario matutino..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-cyan">
+                    <input type="text" id="pedido-especificaciones" placeholder="Ej. Tiro directo, horario matutino..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-brand-cyan transition-all">
                 </div>
-                <div class="p-4 bg-sky-50 rounded-xl flex justify-between items-center border border-sky-100">
-                    <span class="text-sm font-semibold text-slate-600">Total Estimado:</span>
-                    <span id="pedido-total" class="text-xl font-extrabold text-slate-800">$0.00</span>
+                <div class="p-4 bg-gradient-to-r from-sky-50 to-cyan-50 rounded-2xl flex justify-between items-center border border-sky-100">
+                    <span class="text-sm font-bold text-slate-600">Total Estimado:</span>
+                    <span id="pedido-total" class="text-xl font-extrabold text-brand-cobalt">$0.00</span>
                 </div>
-                <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-teal text-white font-bold shadow-md hover:shadow-glow-cyan transition-all">
-                    Finalizar Pedido
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-teal text-white font-bold shadow-md hover:shadow-glow-cyan hover:brightness-105 transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-check-circle"></i> Finalizar Pedido
                 </button>
             </form>
         </div>
     </div>
 
+    <!-- =====================================================================
+         BLOQUE 7: PIE DE PÁGINA CON LOGOTIPO OFICIAL Y DATOS CORPORATIVOS
+         Presenta el emblema triangular cp en gran formato, la razón social,
+         teléfonos directos, correo electrónico y dirección de planta.
+         ===================================================================== -->
     <footer class="bg-brand-deepBlue text-slate-400 py-12 border-t border-slate-800 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
                 <div>
-                    <div class="flex items-center gap-2 mb-4">
-                        <i class="fa-solid fa-truck-concrete text-brand-teal text-2xl"></i>
-                        <span class="font-extrabold text-white text-xl tracking-tight">Concretos Arciniega</span>
+                    <div class="flex items-center gap-3.5 mb-4">
+                        <svg viewBox="0 0 120 110" class="w-16 h-16 sm:w-20 sm:h-20 shrink-0 drop-shadow-md" aria-label="Logo CP Arciniega">
+                            <defs>
+                                <clipPath id="cp-triangle-clip-footer-productos">
+                                    <path d="M54 11 Q60 2 66 11 L113 94 Q118 103 108 103 L12 103 Q2 103 7 94 Z" />
+                                </clipPath>
+                            </defs>
+                            <g clip-path="url(#cp-triangle-clip-footer-productos)">
+                                <rect x="0" y="0" width="120" height="110" fill="#2952e3" />
+                                <text x="20" y="101" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="76">c</text>
+                                <text x="55" y="96" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="82">p</text>
+                            </g>
+                        </svg>
+                        <div class="flex flex-col leading-tight">
+                            <span class="font-bold text-xs sm:text-sm tracking-wider text-sky-300 uppercase">
+                                Construcciones y Pavimentaciones
+                            </span>
+                            <span class="font-extrabold text-lg sm:text-xl tracking-tight text-white uppercase">
+                                Arciniega <span class="text-xs font-semibold text-slate-300">S.A. de C.V.</span>
+                            </span>
+                        </div>
                     </div>
                     <p class="text-sm text-slate-400 leading-relaxed">
-                        Concretos, Pavimentaciones y Azulejos Arciniega S.A. de C.V. Fuerza y precisión en cada metro cúbico.
+                        Construcciones y Pavimentaciones Arciniega S.A. de C.V. Fuerza y precisión en cada metro cúbico para tus proyectos de construcción.
                     </p>
                 </div>
                 <div>
@@ -223,7 +351,7 @@
                 </div>
             </div>
             <div class="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
-                <p>&copy; 2026 Concretos, Pavimentaciones y Azulejos Arciniega S.A. de C.V. Todos los derechos reservados.</p>
+                <p>&copy; 2026 Construcciones y Pavimentaciones Arciniega S.A. de C.V. Todos los derechos reservados.</p>
                 <div class="flex gap-4">
                     <a href="index.html" class="hover:text-brand-cyan transition-colors">Inicio</a>
                     <a href="Productos.html" class="hover:text-brand-cyan transition-colors">Catálogo</a>
@@ -233,6 +361,12 @@
         </div>
     </footer>
 
+    <!-- =====================================================================
+         BLOQUE 8: LÓGICA JAVASCRIPT (CATÁLOGO MYSQL, FILTROS Y PEDIDOS)
+         Gestiona la sesión del cliente, notificaciones flotantes, renderizado
+         dinámico de productos y resistencias, filtrado en tiempo real y
+         registro de pedidos en la base de datos cada 3 segundos.
+         ===================================================================== -->
     <script>
         const API_URL = '/api';
         let catalogoProductos = [];
@@ -240,6 +374,7 @@
         let productoSeleccionado = null;
         let huellaAnterior = '';
 
+        /* Sub-bloque: Manejo de sesión activa y notificaciones */
         function obtenerUsuarioSesion() {
             const data = localStorage.getItem('arciniega_user');
             return data ? JSON.parse(data) : null;
@@ -267,7 +402,7 @@
                 `;
             } else {
                 area.innerHTML = `
-                    <a href="inicio_secion.html" class="bg-gradient-to-r from-brand-cyan to-brand-blue text-white px-6 py-2.5 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-300 font-bold flex items-center gap-2">
+                    <a href="inicio_secion.html" class="bg-gradient-to-r from-brand-royal to-brand-cobalt text-white px-6 py-2.5 rounded-full hover:shadow-glow-royal hover:scale-105 transition-all duration-300 font-bold flex items-center gap-2">
                         <i class="fa-solid fa-user-circle"></i> Iniciar Sesión
                     </a>
                 `;
@@ -283,6 +418,7 @@
             setTimeout(() => toast.remove(), 4000);
         }
 
+        /* Sub-bloque: Renderizado de categorías, tarjetas de productos y resistencias */
         function obtenerIconoCategoria(categoria) {
             const cat = (categoria || '').toLowerCase();
             if (cat.includes('concreto')) return 'fa-truck-concrete';
@@ -300,8 +436,8 @@
                 const activa = cat === categoriaActual;
                 const label = cat === 'todos' ? 'Todos' : cat;
                 const clases = activa
-                    ? 'px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-brand-cyan to-brand-teal text-white shadow-md transition-all'
-                    : 'px-4 py-2 rounded-xl text-sm font-semibold bg-white text-slate-600 hover:bg-sky-50 border border-slate-200 transition-all';
+                    ? 'px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-brand-royal to-brand-cyan text-white shadow-md transition-all'
+                    : 'px-4 py-2 rounded-xl text-sm font-semibold bg-white text-slate-600 hover:bg-sky-50 hover:text-brand-royal border border-slate-200 transition-all';
                 return `<button onclick="filtrarCategoria('${cat}')" class="${clases}">${label}</button>`;
             }).join('');
         }
@@ -309,7 +445,7 @@
         function renderizarProductos(lista) {
             const grid = document.getElementById('productos-grid');
             if (!lista.length) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 font-semibold">No hay productos registrados con ese criterio en la base de datos.</div>`;
+                grid.innerHTML = `<div class="col-span-full bg-white rounded-3xl p-12 text-center shadow-soft border border-sky-100 text-slate-500 font-semibold">No hay productos registrados con ese criterio en la base de datos.</div>`;
                 return;
             }
 
@@ -317,34 +453,38 @@
                 const stockNum = parseFloat(item.stock);
                 const precioNum = parseFloat(item.precio_base);
                 const disponibilidad = stockNum > 0
-                    ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Disponible (${stockNum} ${item.unidad})</span>`
-                    : `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Agotado</span>`;
+                    ? `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/60"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Disponible (${stockNum} ${item.unidad})</span>`
+                    : `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700 border border-red-200/60"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Agotado</span>`;
 
                 return `
-                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-soft hover:-translate-y-1 transition-all flex flex-col justify-between">
+                    <div class="bg-white rounded-3xl p-7 shadow-soft border border-sky-100/80 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
+                        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-brand-royal to-brand-teal opacity-80 group-hover:opacity-100 transition-opacity"></div>
                         <div>
                             <div class="flex justify-between items-start mb-4">
-                                <span class="px-3 py-1 rounded-lg bg-sky-50 text-brand-cyan text-xs font-bold">${item.categoria}</span>
-                                <div class="w-10 h-10 rounded-xl bg-teal-50 text-brand-teal flex items-center justify-center text-lg">
+                                <span class="px-3 py-1 rounded-xl bg-sky-50 text-brand-royal border border-sky-100 text-xs font-extrabold">${item.categoria}</span>
+                                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-teal-50 to-cyan-100 text-brand-teal flex items-center justify-center text-lg shadow-sm group-hover:scale-110 transition-transform">
                                     <i class="fa-solid ${obtenerIconoCategoria(item.categoria)}"></i>
                                 </div>
                             </div>
-                            <h3 class="text-xl font-extrabold text-slate-800 mb-1">${item.desc1}</h3>
+                            <h3 class="text-xl font-extrabold text-slate-800 mb-1 group-hover:text-brand-royal transition-colors">${item.desc1}</h3>
                             <p class="text-sm text-brand-teal font-semibold mb-3">${item.desc2 || item.tipo}</p>
-                            <p class="text-xs text-slate-400 mb-4"><i class="fa-solid fa-award text-brand-cyan mr-1"></i> Marca / Prov: <strong class="text-slate-600">${item.proveedor}</strong></p>
+                            <p class="text-xs text-slate-500 mb-4 flex items-center gap-1.5">
+                                <i class="fa-solid fa-award text-brand-cyan"></i>
+                                <span>Marca / Prov: <strong class="text-slate-700">${item.proveedor}</strong></span>
+                            </p>
                         </div>
 
                         <div class="pt-4 border-t border-slate-100">
-                            <div class="flex justify-between items-end mb-4">
+                            <div class="flex justify-between items-end mb-5 gap-2">
                                 <div>
-                                    <span class="text-xs text-slate-400 block">Costo por ${item.unidad}</span>
-                                    <span class="text-2xl font-extrabold text-slate-800">$${precioNum.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>
-                                    <span class="text-xs font-semibold text-slate-400">MXN</span>
+                                    <span class="text-xs text-slate-400 font-medium block">Costo por ${item.unidad}</span>
+                                    <span class="text-2xl font-black text-slate-800">$${precioNum.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>
+                                    <span class="text-xs font-bold text-slate-400">MXN</span>
                                 </div>
                                 ${disponibilidad}
                             </div>
-                            <button onclick="intentarComprar(${item.id_articulos})" class="w-full py-3 rounded-xl bg-slate-800 text-white font-bold text-sm hover:bg-gradient-to-r hover:from-brand-cyan hover:to-brand-teal transition-all flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-cart-plus"></i> Comprar
+                            <button onclick="intentarComprar(${item.id_articulos})" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-brand-deepBlue to-slate-800 text-white font-bold text-sm hover:from-brand-royal hover:to-brand-cyan hover:shadow-glow-royal transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cart-plus"></i> Comprar Ahora
                             </button>
                         </div>
                     </div>
@@ -354,11 +494,11 @@
 
         function renderizarResistencias(lista) {
             document.getElementById('resistencias-grid').innerHTML = lista.map(r => `
-                <div class="p-4 rounded-2xl bg-sky-50/70 border border-sky-100 hover:border-brand-cyan transition-colors">
-                    <div class="flex items-center gap-2 text-brand-cyan font-bold text-xs mb-1">
-                        <i class="fa-solid fa-shield-halved"></i> GRADO #${r.id_resistencia}
+                <div class="p-5 rounded-2xl bg-gradient-to-br from-sky-50/90 to-white border border-sky-100 hover:border-brand-royal hover:shadow-md transition-all group">
+                    <div class="flex items-center gap-2 text-brand-royal font-extrabold text-xs mb-1.5">
+                        <i class="fa-solid fa-shield-halved text-brand-cyan group-hover:scale-110 transition-transform"></i> GRADO #${r.id_resistencia}
                     </div>
-                    <p class="font-bold text-slate-800 text-sm">${r.nombre}</p>
+                    <p class="font-extrabold text-slate-800 text-sm">${r.nombre}</p>
                 </div>
             `).join('');
         }
@@ -381,6 +521,7 @@
             renderizarProductos(filtrados);
         }
 
+        /* Sub-bloque: Gestión de compra en línea y guardado en /api/pedidos */
         function intentarComprar(idArticulo) {
             const user = obtenerUsuarioSesion();
 
@@ -456,6 +597,7 @@
             }
         }
 
+        /* Sub-bloque: Sincronización automática con MySQL */
         async function cargarDatosDesdeBD() {
             try {
                 const [resArt, resRes] = await Promise.all([
@@ -483,8 +625,8 @@
             } catch (error) {
                 if (catalogoProductos.length === 0) {
                     document.getElementById('productos-grid').innerHTML = `
-                        <div class="col-span-full text-center py-12 text-slate-500 font-semibold">
-                            Inicia el servidor en tu terminal (<code class="bg-slate-200 px-2 py-1 rounded">node server.js</code>) para visualizar los productos de MySQL.
+                        <div class="col-span-full bg-white rounded-3xl p-12 text-center shadow-soft border border-sky-100 text-slate-500 font-semibold">
+                            Inicia el servidor en tu terminal (<code class="bg-slate-100 text-brand-royal px-2.5 py-1 rounded-lg font-mono text-xs">node server.js</code>) para visualizar los productos de MySQL.
                         </div>
                     `;
                 }

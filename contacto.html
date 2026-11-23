@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
+
+<!-- =========================================================================
+     BLOQUE 1: CONFIGURACIÓN DEL DOCUMENTO, LIBRERÍAS Y PALETA DE COLORES
+     Define la codificación, vista adaptable, el título oficial de la empresa,
+     la carga de Tailwind CSS, iconos FontAwesome, tipografía Inter y la
+     configuración personalizada de colores y sombras corporativas.
+     ========================================================================= -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Concretos Arciniega - Contacto y Ubicación</title>
+    <title>Contacto y Ubicación - Construcciones y Pavimentaciones Arciniega S.A. de C.V.</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -18,6 +27,8 @@
                             cyan: '#06b6d4',
                             lightCyan: '#22d3ee',
                             blue: '#3b82f6',
+                            royal: '#1d4ed8',
+                            cobalt: '#1e3a8a',
                             deepBlue: '#0f172a',
                             teal: '#14b8a6',
                             emerald: '#10b981',
@@ -26,34 +37,102 @@
                     },
                     boxShadow: {
                         'glow-cyan': '0 0 20px rgba(6, 182, 212, 0.4)',
-                        'soft': '0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.01)'
+                        'glow-royal': '0 10px 25px -5px rgba(29, 78, 216, 0.35)',
+                        'soft': '0 12px 30px -6px rgba(15, 23, 42, 0.07), 0 4px 12px -4px rgba(15, 23, 42, 0.03)'
                     }
                 }
             }
         }
     </script>
+
+    <!-- =====================================================================
+         BLOQUE 2: ESTILOS PERSONALIZADOS Y ANIMACIONES VISUALES
+         Controla la barra de desplazamiento, el efecto cristal (glassmorphism),
+         las animaciones de entrada suave y las notificaciones flotantes.
+         ===================================================================== -->
     <style>
-        .glass-panel { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(12px); }
-        #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 60; display: flex; flex-direction: column; gap: 0.75rem; }
-        .toast { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; border-radius: 1rem; background: #0f172a; color: #fff; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .fade-in { animation: fadeIn 0.45s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #toast-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .toast {
+            min-width: 260px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            border-radius: 1rem;
+            background: #0f172a;
+            color: #fff;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.28);
+            animation: slideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
         .toast-success { border-left: 4px solid #10b981; }
         .toast-error { border-left: 4px solid #ef4444; }
         .toast-info { border-left: 4px solid #06b6d4; }
     </style>
 </head>
+
 <body class="bg-brand-bgLight text-slate-800 font-sans flex flex-col min-h-screen selection:bg-brand-cyan selection:text-white">
 
     <div id="toast-container"></div>
 
-    <!-- Barra de Navegación -->
-    <nav class="glass-panel sticky top-0 z-50 shadow-sm border-b border-sky-100/50">
+    <!-- =====================================================================
+         BLOQUE 3: BARRA DE NAVEGACIÓN PRINCIPAL Y LOGOTIPO OFICIAL
+         Muestra el isotipo triangular azul cp junto con la razón social
+         ampliada, los enlaces de navegación, el estado de sesión y menú móvil.
+         ===================================================================== -->
+    <nav class="glass-panel sticky top-0 z-50 shadow-sm border-b border-sky-100/60">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20">
-                <a href="index.html" class="flex items-center cursor-pointer group">
-                    <div class="bg-gradient-to-br from-brand-cyan to-brand-teal p-2.5 rounded-xl shadow-lg group-hover:shadow-glow-cyan transition-all duration-300">
-                        <i class="fa-solid fa-truck-concrete text-white text-2xl"></i>
+            <div class="flex justify-between items-center h-24 sm:h-28">
+                <a href="index.html" class="flex items-center gap-3 sm:gap-4 cursor-pointer group py-1.5">
+                    <svg viewBox="0 0 120 110" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 shrink-0 drop-shadow-sm transition-transform duration-300 group-hover:scale-105" aria-label="Logo CP Arciniega">
+                        <defs>
+                            <clipPath id="cp-triangle-clip-nav-contacto">
+                                <path d="M54 11 Q60 2 66 11 L113 94 Q118 103 108 103 L12 103 Q2 103 7 94 Z" />
+                            </clipPath>
+                        </defs>
+                        <g clip-path="url(#cp-triangle-clip-nav-contacto)">
+                            <rect x="0" y="0" width="120" height="110" fill="#2952e3" />
+                            <text x="20" y="101" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="76">c</text>
+                            <text x="55" y="96" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="82">p</text>
+                        </g>
+                    </svg>
+                    <div class="flex flex-col leading-tight">
+                        <span class="font-extrabold text-xs sm:text-sm md:text-base tracking-wide text-brand-cobalt uppercase">
+                            Construcciones y Pavimentaciones
+                        </span>
+                        <span class="font-black text-base sm:text-xl md:text-2xl tracking-tight text-brand-royal uppercase">
+                            Arciniega <span class="text-xs sm:text-sm font-bold text-slate-600">S.A. de C.V.</span>
+                        </span>
                     </div>
-                    <span class="font-extrabold text-2xl ml-3 bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-brand-cyan tracking-tight">Arciniega</span>
                 </a>
                 
                 <div class="hidden md:flex items-center space-x-2">
@@ -77,119 +156,159 @@
                 <a href="index.html" class="block w-full text-left px-4 py-3 rounded-lg text-slate-700 font-bold hover:bg-sky-50">Inicio</a>
                 <a href="Productos.html" class="block w-full text-left px-4 py-3 rounded-lg text-slate-700 font-bold hover:bg-sky-50">Productos</a>
                 <a href="contacto.html" class="block w-full text-left px-4 py-3 rounded-lg bg-sky-50 text-brand-cyan font-bold">Contacto</a>
-                <a href="inicio_secion.html" class="block w-full text-center px-4 py-3 mt-4 rounded-xl bg-brand-cyan text-white font-bold shadow-md">Iniciar Sesión</a>
+                <a href="inicio_secion.html" class="block w-full text-center px-4 py-3 mt-4 rounded-xl bg-gradient-to-r from-brand-royal to-brand-cobalt text-white font-bold shadow-md">Iniciar Sesión</a>
             </div>
         </div>
     </nav>
 
-    <!-- Encabezado -->
-    <header class="relative overflow-hidden bg-brand-deepBlue text-white py-14">
-        <div class="absolute inset-0 z-0 opacity-30">
-            <div class="absolute -top-20 -left-20 w-80 h-80 bg-brand-cyan rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
-            <div class="absolute bottom-0 -right-20 w-80 h-80 bg-brand-teal rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
+    <!-- =====================================================================
+         BLOQUE 4: ENCABEZADO HERO DE CONTACTO Y ATENCIÓN A OBRAS
+         Presenta la portada superior con iluminación ambiental en tonos cian
+         y azul real, destacando los canales de atención técnica y cotización.
+         ===================================================================== -->
+    <header class="relative overflow-hidden bg-brand-deepBlue text-white pt-16 pb-24">
+        <div class="absolute inset-0 z-0 opacity-35">
+            <div class="absolute -top-24 -left-24 w-96 h-96 bg-brand-cyan rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
+            <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 bg-brand-royal rounded-full mix-blend-screen filter blur-3xl opacity-40"></div>
+            <div class="absolute -bottom-16 -right-24 w-96 h-96 bg-brand-teal rounded-full mix-blend-screen filter blur-3xl opacity-60"></div>
         </div>
-        <div class="relative z-10 max-w-7xl mx-auto px-4 text-center">
-            <span class="inline-block py-1 px-4 rounded-full bg-cyan-900/50 border border-brand-cyan/40 text-brand-lightCyan text-xs font-bold tracking-widest mb-4 uppercase">
-                Atención a Obras y Proyectos
+        <div class="relative z-10 max-w-7xl mx-auto px-4 text-center fade-in">
+            <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-cyan-900/50 border border-brand-cyan/40 text-brand-lightCyan text-xs font-bold tracking-widest mb-5 uppercase">
+                <i class="fa-solid fa-headset"></i> Atención a Obras y Proyectos
             </span>
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight">Contáctanos y Visita Nuestra Planta</h1>
-            <p class="text-slate-300 max-w-2xl mx-auto text-base">
-                Solicita asesoría técnica, programa tus entregas de concreto o ubícanos directamente en el mapa.
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight">
+                Contáctanos y Visita <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-lightCyan to-brand-teal">Nuestra Planta</span>
+            </h1>
+            <p class="text-slate-300 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+                Solicita asesoría técnica especializada, programa tus entregas de concreto premezclado o ubícanos directamente en el mapa.
             </p>
         </div>
     </header>
 
-    <!-- Contenido Principal -->
-    <main class="flex-grow max-w-7xl mx-auto px-4 py-12 w-full space-y-12">
+    <main class="flex-grow max-w-7xl mx-auto px-4 pb-16 w-full space-y-12">
 
-        <!-- Tarjetas de Contacto Rápido -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white rounded-2xl p-6 shadow-soft border border-sky-100 flex items-start gap-4">
-                <div class="w-12 h-12 rounded-xl bg-cyan-50 text-brand-cyan flex items-center justify-center text-xl shrink-0">
+        <!-- =================================================================
+             BLOQUE 5: TARJETAS DE CONTACTO DIRECTO (TELÉFONOS, HORARIOS Y PLANTA)
+             Tres tarjetas elevadas sobre el borde inferior del encabezado con
+             enlaces directos para llamadas, correo electrónico y ubicación.
+             ================================================================= -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 -mt-12 relative z-20 fade-in">
+            <div class="bg-white rounded-3xl p-7 shadow-soft border border-sky-100 border-t-4 border-t-brand-cyan hover:-translate-y-1 transition-all duration-300 flex items-start gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-50 to-sky-100 text-brand-cyan flex items-center justify-center text-2xl shrink-0 shadow-sm">
                     <i class="fa-solid fa-phone-volume"></i>
                 </div>
                 <div>
                     <h3 class="font-extrabold text-slate-800 text-lg">Teléfonos y Ventas</h3>
-                    <p class="text-sm text-slate-500 mt-1">Atención directa para cotizaciones:</p>
-                    <a href="tel:+525543404828" class="block text-sm font-bold text-brand-cyan hover:underline mt-2">+52 55 4340 4828</a>
-                    <a href="tel:7221044075" class="block text-sm font-bold text-slate-700 hover:text-brand-cyan mt-0.5">722 104 4075</a>
-                    <a href="tel:7617340713" class="block text-sm font-bold text-slate-700 hover:text-brand-cyan mt-0.5">761 734 0713</a>
+                    <p class="text-xs text-slate-500 mt-0.5">Atención directa para cotizaciones:</p>
+                    <div class="mt-3 space-y-1">
+                        <a href="tel:+525543404828" class="flex items-center gap-2 text-sm font-extrabold text-brand-cyan hover:underline">
+                            <i class="fa-solid fa-mobile-screen text-xs"></i> +52 55 4340 4828
+                        </a>
+                        <a href="tel:7221044075" class="flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-brand-cyan transition-colors">
+                            <i class="fa-solid fa-phone text-xs text-slate-400"></i> 722 104 4075
+                        </a>
+                        <a href="tel:7617340713" class="flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-brand-cyan transition-colors">
+                            <i class="fa-solid fa-phone text-xs text-slate-400"></i> 761 734 0713
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl p-6 shadow-soft border border-sky-100 flex items-start gap-4">
-                <div class="w-12 h-12 rounded-xl bg-teal-50 text-brand-teal flex items-center justify-center text-xl shrink-0">
+            <div class="bg-white rounded-3xl p-7 shadow-soft border border-sky-100 border-t-4 border-t-brand-teal hover:-translate-y-1 transition-all duration-300 flex items-start gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-50 to-emerald-100 text-brand-teal flex items-center justify-center text-2xl shrink-0 shadow-sm">
                     <i class="fa-solid fa-envelope-open-text"></i>
                 </div>
                 <div>
                     <h3 class="font-extrabold text-slate-800 text-lg">Correo y Horarios</h3>
-                    <a href="mailto:concretos.arciniega@gmail.com" class="block text-sm font-bold text-brand-teal hover:underline mt-1">concretos.arciniega@gmail.com</a>
-                    <p class="text-xs text-slate-500 mt-3 leading-relaxed">
-                        <strong class="text-slate-700">Lunes a Viernes:</strong> 8:00 AM – 6:00 PM<br>
-                        <strong class="text-slate-700">Sábados:</strong> 8:00 AM – 2:00 PM
-                    </p>
+                    <a href="mailto:concretos.arciniega@gmail.com" class="block text-sm font-bold text-brand-teal hover:underline mt-1 break-all">
+                        concretos.arciniega@gmail.com
+                    </a>
+                    <div class="mt-3 pt-2.5 border-t border-slate-100 text-xs text-slate-500 space-y-1">
+                        <p><strong class="text-slate-700">Lunes a Viernes:</strong> 8:00 AM – 6:00 PM</p>
+                        <p><strong class="text-slate-700">Sábados:</strong> 8:00 AM – 2:00 PM</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl p-6 shadow-soft border border-sky-100 flex items-start gap-4">
-                <div class="w-12 h-12 rounded-xl bg-blue-50 text-brand-blue flex items-center justify-center text-xl shrink-0">
+            <div class="bg-white rounded-3xl p-7 shadow-soft border border-sky-100 border-t-4 border-t-brand-royal hover:-translate-y-1 transition-all duration-300 flex items-start gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-100 text-brand-royal flex items-center justify-center text-2xl shrink-0 shadow-sm">
                     <i class="fa-solid fa-location-dot"></i>
                 </div>
                 <div>
                     <h3 class="font-extrabold text-slate-800 text-lg">Planta Matriz</h3>
                     <p class="text-sm text-slate-600 mt-1 leading-relaxed">
-                        Carretera Jilotepec - Ixtlahuaca Km 2.4, Bocote Centro / Las Manzanas, Jilotepec, Estado de México.
+                        Carretera Jilotepec - Ixtlahuaca Km 2.4, Bocote Centro / Las Manzanas, Jilotepec, Edo. de México.
                     </p>
-                    <a href="#seccion-mapa" class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-blue hover:underline mt-2">
-                        <i class="fa-solid fa-map-pin"></i> Ver en el mapa abajo
+                    <a href="#seccion-mapa" class="inline-flex items-center gap-1.5 text-xs font-extrabold text-brand-royal hover:text-brand-cobalt hover:underline mt-3">
+                        <i class="fa-solid fa-map-pin"></i> Ver ubicación en mapa
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- Formulario + Mapa en Google Maps -->
+        <!-- =================================================================
+             BLOQUE 6: FORMULARIO DE ASESORÍA DIRECTA Y MAPA INTERACTIVO
+             Divide la sección en dos columnas: a la izquierda el formulario
+             conectado a /api/contacto y WhatsApp; a la derecha el mapa en
+             vivo de Google Maps con botón de indicaciones.
+             ================================================================= -->
         <div id="seccion-mapa" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             
-            <!-- Formulario de Contacto -->
-            <div class="lg:col-span-5 bg-white rounded-3xl p-8 shadow-soft border border-sky-100 flex flex-col justify-between">
+            <div class="lg:col-span-5 bg-white rounded-3xl p-8 shadow-soft border border-sky-100 flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-cyan via-brand-royal to-brand-teal"></div>
                 <div>
-                    <span class="inline-block py-1 px-3 rounded-full bg-teal-50 text-brand-teal text-xs font-bold uppercase mb-2">Asesoría Directa</span>
+                    <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-teal-50 text-brand-teal text-xs font-bold uppercase mb-3">
+                        <i class="fa-solid fa-comments"></i> Asesoría Directa
+                    </span>
                     <h2 class="text-2xl font-extrabold text-slate-800 mb-2">Envíanos un Mensaje</h2>
-                    <p class="text-sm text-slate-500 mb-6">Cuéntanos qué material o resistencia de concreto necesitas y un asesor te responderá a la brevedad.</p>
+                    <p class="text-sm text-slate-500 mb-6 leading-relaxed">Cuéntanos qué material o resistencia de concreto necesitas y un asesor te responderá a la brevedad.</p>
 
                     <form onsubmit="enviarMensajeContacto(event)" class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Nombre Completo *</label>
-                            <input type="text" id="contacto-nombre" placeholder="Tu nombre o empresa" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                            <div class="relative">
+                                <i class="fa-solid fa-user absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                                <input type="text" id="contacto-nombre" placeholder="Tu nombre o empresa" class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:ring-2 focus:ring-brand-cyan transition-all" required>
+                            </div>
                         </div>
+
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">Teléfono / WhatsApp *</label>
-                                <input type="tel" id="contacto-telefono" placeholder="55 1234 5678" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan" required>
+                                <div class="relative">
+                                    <i class="fa-solid fa-phone absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                                    <input type="tel" id="contacto-telefono" placeholder="55 1234 5678" class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:ring-2 focus:ring-brand-cyan transition-all" required>
+                                </div>
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">Correo Electrónico</label>
-                                <input type="email" id="contacto-email" placeholder="correo@ejemplo.com" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan">
+                                <div class="relative">
+                                    <i class="fa-solid fa-envelope absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                                    <input type="email" id="contacto-email" placeholder="correo@ejemplo.com" class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:ring-2 focus:ring-brand-cyan transition-all">
+                                </div>
                             </div>
                         </div>
+
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Asunto *</label>
-                            <select id="contacto-asunto" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan font-medium text-slate-700">
+                            <select id="contacto-asunto" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:ring-2 focus:ring-brand-cyan font-semibold text-slate-700 transition-all">
                                 <option value="Cotización de Concreto Premezclado">Cotización de Concreto Premezclado</option>
                                 <option value="Materiales y Ferretería">Materiales y Ferretería</option>
                                 <option value="Asesoría Técnica en Obra">Asesoría Técnica en Obra</option>
                                 <option value="Seguimiento de Pedido">Seguimiento de Pedido</option>
                             </select>
                         </div>
+
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Mensaje o Detalles de la Obra *</label>
-                            <textarea id="contacto-mensaje" rows="3" placeholder="Indica ubicación de la obra, metros cúbicos o materiales requeridos..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-cyan resize-none" required></textarea>
+                            <textarea id="contacto-mensaje" rows="3" placeholder="Indica ubicación de la obra, metros cúbicos o materiales requeridos..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:ring-2 focus:ring-brand-cyan resize-none transition-all" required></textarea>
                         </div>
+
                         <div class="pt-2 flex flex-col sm:flex-row gap-3">
-                            <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-teal text-white font-bold text-sm shadow-md hover:shadow-glow-cyan transition-all flex items-center justify-center gap-2">
+                            <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-teal text-white font-bold text-sm shadow-md hover:shadow-glow-cyan hover:brightness-105 transition-all flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-paper-plane"></i> Enviar Solicitud
                             </button>
-                            <button type="button" onclick="enviarPorWhatsApp()" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2">
+                            <button type="button" onclick="enviarPorWhatsApp()" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shadow-md hover:scale-[1.01] transition-all flex items-center justify-center gap-2">
                                 <i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp
                             </button>
                         </div>
@@ -197,25 +316,25 @@
                 </div>
             </div>
 
-            <!-- Apartado de Google Maps -->
-            <div class="lg:col-span-7 bg-white rounded-3xl p-4 sm:p-6 shadow-soft border border-sky-100 flex flex-col">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-2">
+            <div class="lg:col-span-7 bg-white rounded-3xl p-5 sm:p-7 shadow-soft border border-sky-100 flex flex-col relative overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-royal via-brand-blue to-brand-cyan"></div>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5">
                     <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-brand-cyan flex items-center gap-1.5">
+                        <span class="text-xs font-bold uppercase tracking-wider text-brand-royal flex items-center gap-1.5 mb-1">
                             <i class="fa-solid fa-map-location-dot"></i> Ubicación en Google Maps
                         </span>
-                        <h2 class="text-xl font-extrabold text-slate-800">Concretos Arciniega — Planta Jilotepec</h2>
+                        <h2 class="text-xl font-extrabold text-slate-800">Arciniega — Planta Jilotepec</h2>
                     </div>
-                    <a href="https://maps.google.com/?q=Concretos+Arciniega+Carretera+Jilotepec+Ixtlahuaca" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-sky-50 text-brand-blue hover:bg-brand-blue hover:text-white font-bold text-xs transition-colors flex items-center gap-2 shrink-0">
+                    <a href="https://maps.google.com/?q=Concretos+Arciniega+Carretera+Jilotepec+Ixtlahuaca" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-royal to-brand-cobalt text-white hover:shadow-glow-royal hover:brightness-110 font-bold text-xs transition-all flex items-center gap-2 shrink-0">
                         <i class="fa-solid fa-diamond-turn-right"></i> Cómo llegar
                     </a>
                 </div>
 
-                <div class="relative w-full flex-grow min-h-[380px] rounded-2xl overflow-hidden border border-slate-200 shadow-inner">
+                <div class="relative w-full flex-grow min-h-[400px] rounded-2xl overflow-hidden border border-slate-200 shadow-inner">
                     <iframe 
-                        title="Ubicación de Concretos Arciniega en Google Maps"
+                        title="Ubicación de Construcciones y Pavimentaciones Arciniega en Google Maps"
                         src="https://maps.google.com/maps?q=Concretos%20Arciniega%2C%20Carretera%20Jilotepec%20-%20Ixtlahuaca%2C%20Jilotepec%2C%20Estado%20de%20Mexico&t=&z=15&ie=UTF8&iwloc=&output=embed"
-                        class="w-full h-full min-h-[380px] border-0"
+                        class="w-full h-full min-h-[400px] border-0"
                         loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
@@ -225,17 +344,39 @@
         </div>
     </main>
 
-    <!-- Pie de Página -->
+    <!-- =====================================================================
+         BLOQUE 7: PIE DE PÁGINA CON LOGOTIPO OFICIAL Y DATOS CORPORATIVOS
+         Presenta el emblema triangular cp en gran formato, la razón social,
+         teléfonos directos, correo electrónico y dirección de planta.
+         ===================================================================== -->
     <footer class="bg-brand-deepBlue text-slate-400 py-12 border-t border-slate-800 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
                 <div>
-                    <div class="flex items-center gap-2 mb-4">
-                        <i class="fa-solid fa-truck-concrete text-brand-teal text-2xl"></i>
-                        <span class="font-extrabold text-white text-xl tracking-tight">Concretos Arciniega</span>
+                    <div class="flex items-center gap-3.5 mb-4">
+                        <svg viewBox="0 0 120 110" class="w-16 h-16 sm:w-20 sm:h-20 shrink-0 drop-shadow-md" aria-label="Logo CP Arciniega">
+                            <defs>
+                                <clipPath id="cp-triangle-clip-footer-contacto">
+                                    <path d="M54 11 Q60 2 66 11 L113 94 Q118 103 108 103 L12 103 Q2 103 7 94 Z" />
+                                </clipPath>
+                            </defs>
+                            <g clip-path="url(#cp-triangle-clip-footer-contacto)">
+                                <rect x="0" y="0" width="120" height="110" fill="#2952e3" />
+                                <text x="20" y="101" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="76">c</text>
+                                <text x="55" y="96" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="82">p</text>
+                            </g>
+                        </svg>
+                        <div class="flex flex-col leading-tight">
+                            <span class="font-bold text-xs sm:text-sm tracking-wider text-sky-300 uppercase">
+                                Construcciones y Pavimentaciones
+                            </span>
+                            <span class="font-extrabold text-lg sm:text-xl tracking-tight text-white uppercase">
+                                Arciniega <span class="text-xs font-semibold text-slate-300">S.A. de C.V.</span>
+                            </span>
+                        </div>
                     </div>
                     <p class="text-sm text-slate-400 leading-relaxed">
-                        Concretos, Pavimentaciones y Azulejos Arciniega S.A. de C.V. Fuerza y precisión en cada metro cúbico.
+                        Construcciones y Pavimentaciones Arciniega S.A. de C.V. Fuerza y precisión en cada metro cúbico para tus proyectos de construcción.
                     </p>
                 </div>
                 <div>
@@ -255,7 +396,7 @@
                 </div>
             </div>
             <div class="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
-                <p>&copy; 2026 Concretos, Pavimentaciones y Azulejos Arciniega S.A. de C.V. Todos los derechos reservados.</p>
+                <p>&copy; 2026 Construcciones y Pavimentaciones Arciniega S.A. de C.V. Todos los derechos reservados.</p>
                 <div class="flex gap-4">
                     <a href="index.html" class="hover:text-brand-cyan transition-colors">Inicio</a>
                     <a href="Productos.html" class="hover:text-brand-cyan transition-colors">Catálogo</a>
@@ -265,7 +406,14 @@
         </div>
     </footer>
 
+    <!-- =====================================================================
+         BLOQUE 8: LÓGICA JAVASCRIPT (SESIÓN, FORMULARIO API Y WHATSAPP)
+         Gestiona la detección de usuario activo, el autocompletado del
+         formulario de contacto, las alertas visuales, el envío a /api/contacto
+         y la apertura directa de WhatsApp.
+         ===================================================================== -->
     <script>
+        /* Sub-bloque: Manejo de sesión activa y autocompletado */
         function obtenerUsuarioSesion() {
             const data = localStorage.getItem('arciniega_user');
             return data ? JSON.parse(data) : null;
@@ -283,6 +431,7 @@
             if (user) {
                 area.innerHTML = `
                     <div class="flex items-center gap-3">
+                        ${user.rol === 'admin' ? `<a href="admin.html" class="text-xs font-bold bg-blue-100 text-brand-royal px-3 py-2 rounded-lg hover:bg-blue-200 transition-colors">Panel Admin</a>` : ''}
                         <span class="text-sm font-bold text-slate-700 bg-sky-100 px-3 py-1.5 rounded-full">
                             <i class="fa-solid fa-user-check text-brand-teal mr-1"></i> ${user.nombre}
                         </span>
@@ -291,19 +440,19 @@
                         </button>
                     </div>
                 `;
-                // Autocompletar datos del cliente en el formulario si tiene sesión activa
                 if (user.nombre) document.getElementById('contacto-nombre').value = user.nombre;
                 if (user.telefono) document.getElementById('contacto-telefono').value = user.telefono;
                 if (user.email) document.getElementById('contacto-email').value = user.email;
             } else {
                 area.innerHTML = `
-                    <a href="inicio_secion.html" class="bg-gradient-to-r from-brand-cyan to-brand-blue text-white px-6 py-2.5 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-300 font-bold flex items-center gap-2">
+                    <a href="inicio_secion.html" class="bg-gradient-to-r from-brand-royal to-brand-cobalt text-white px-6 py-2.5 rounded-full hover:shadow-glow-royal hover:scale-105 transition-all duration-300 font-bold flex items-center gap-2">
                         <i class="fa-solid fa-user-circle"></i> Iniciar Sesión
                     </a>
                 `;
             }
         }
 
+        /* Sub-bloque: Notificaciones flotantes (Toasts) */
         function notificar(mensaje, tipo = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -313,6 +462,7 @@
             setTimeout(() => toast.remove(), 4000);
         }
 
+        /* Sub-bloque: Envío de solicitud al servidor (/api/contacto) y WhatsApp */
         async function enviarMensajeContacto(e) {
             e.preventDefault();
             const payload = {
@@ -342,7 +492,7 @@
             const nombre = document.getElementById('contacto-nombre').value.trim() || 'Cliente';
             const asunto = document.getElementById('contacto-asunto').value;
             const mensaje = document.getElementById('contacto-mensaje').value.trim() || 'Hola, me gustaría solicitar información.';
-            const texto = encodeURIComponent(`Hola Concretos Arciniega, soy ${nombre}.\nAsunto: ${asunto}\nMensaje: ${mensaje}`);
+            const texto = encodeURIComponent(`Hola Construcciones y Pavimentaciones Arciniega, soy ${nombre}.\nAsunto: ${asunto}\nMensaje: ${mensaje}`);
             window.open(`https://wa.me/525543404828?text=${texto}`, '_blank');
         }
 
